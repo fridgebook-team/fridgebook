@@ -1,0 +1,2 @@
+# fridgebook
+Digitale Lebensmittelverwaltung - PWA
