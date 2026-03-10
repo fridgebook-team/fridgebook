@@ -1,10 +1,10 @@
-#Contribution Guidelines - FridgeBook 🧊📱
+# Contribution Guidelines - FridgeBook 🧊📱
 Willkommen im FridgeBook-Team!
 Damit wir alle sauber zusammenarbeiten können, halten wir uns an Regeln. Bitte (:
 
 ---
 
-##🌿 Branching-Strategie
+## 🌿 Branching-Strategie
 
 Arbeit mit **Hybrid-Modell** aus GitHub Flow und Git Flow: 
 https://docs.github.com/en/get-started/using-github/github-flow
@@ -23,14 +23,14 @@ https://www.gitkraken.com/learn/git/git-flow
 
 ---
 
-##🔄 Täglicher Workflow
-###1. Neuen Branch erstellen (für ein neues Feature)
+## 🔄 Täglicher Workflow
+### 1. Neuen Branch erstellen (für ein neues Feature)
 ```bash
 git checkout dev
 git pull origin dev
 git checkout -b feature/[kürzel]/[feature-name]
 ```
-###2. Arbeiten & committen
+### 2. Arbeiten & committen
 ```bash
 git add .
 git commit -m "feat: kurze beschreibung"
@@ -44,7 +44,7 @@ Commit-Typen:
 - `refactor:` Code verbessern
 - `test:` Tests
 
-###3. Regelmäßig den neuesten Stand von dev holen
+### 3. Regelmäßig den neuesten Stand von dev holen
 
 `git fetch origin`
 `git log origin/dev --oneline` (erst checken) oder `git lol` aus KONF
@@ -52,13 +52,13 @@ Commit-Typen:
 
 Keine Überraschungen beim Pushen!
 
-###4. Pushen ( erst nach fetch + merge!)
+### 4. Pushen ( erst nach fetch + merge!)
 
 `git push origin feature/[kürzel]/[feature-name]`
 
 ---
 
-##🧪 Pull Request (PR) Prozess
+## 🧪 Pull Request (PR) Prozess
 1. Sobald dein Feature fertig ist:
 
 2. Push deinen Branch (siehe oben)
@@ -75,7 +75,7 @@ Mindestens 1 Teammitglied als Reviewer
 
 Warten auf Review
 
-###Nach dem Review:
+### Nach dem Review:
 - Bei Änderungswünschen: Nachbessern, committen, pushen (der PR updated sich automatisch!)
 - Wenn approved: Merge (per "Squash and merge" auf GitHub)
 
@@ -84,7 +84,7 @@ Aufräumen: (darüber können wir noch sprechen)
 git branch -d feature/[kürzel]/[feature-name]
 git push origin --delete feature/[kürzel]/[feature-name]
 ```
-#⚠️ Wichtige Regeln
+# ⚠️ Wichtige Regeln
 - ✅ Niemals direkt auf main oder dev pushen
 - ✅ Immer Pull Requests + Review (mindestens 1 Person)
 - ✅ Vor jedem Push: fetch origin + log checken + ggf. merge origin/dev
@@ -92,7 +92,7 @@ git push origin --delete feature/[kürzel]/[feature-name]
 - ✅ Keine .env-Dateien, Passwörter oder API-Keys committen!
 - ✅ Bei Konflikten: Nicht in Panik verfallen – Team fragen!
 
-#🆘 Hilfe & Fragen
+# 🆘 Hilfe & Fragen
 Bei Problemen:
 Im GitHub Issue diskutieren
 Oder direkt im Team-Chat (WhatsApp/Discord) fragen
