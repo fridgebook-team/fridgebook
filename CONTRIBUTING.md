@@ -1,34 +1,23 @@
-# Contribution Guidelines - FridgeBook 🧊📱
-Willkommen im FridgeBook-Team!
-Damit wir alle sauber zusammenarbeiten können, halten wir uns an Regeln. Bitte (:
+# Contribution Guidelines - FridgeBook
 
 ---
 
-## 🌿 Branching-Strategie
+##  Branching
 
-Arbeit mit **Hybrid-Modell** aus GitHub Flow und Git Flow: 
-https://docs.github.com/en/get-started/using-github/github-flow
-https://www.gitkraken.com/learn/git/git-flow
+- `main` → no touch pls (PRs most important)
+- `dev` 
+- `feature` -> name pls
 
-- `main` → Nur für Präsentationen & Meilensteine (heilig!)
-- `dev` → Unser täglicher Arbeitsstand (hier wird gemerged)
-- `feature/[kürzel]/[feature-name]` → persönlicher Arbeitsbranch
-
-**Beispiele:**
-`feature/ba/barcode-scanner` // ba = Bianca Amberger
-`feature/mp/inventory-ui` // mp = Marialla Pranjic
-`feature/be/recipe-api` // Ich glaube ihr könnt euch den Rest denken
-
-**Wichtig:** NIE direkt auf main oder dev arbeiten. Immer im eigenen Feature-Branch!
+**Wichtig:** NIE direkt auf main oder dev arbeiten. Immer im Feature-Branch!
 
 ---
 
-## 🔄 Täglicher Workflow
+## Workflow
 ### 1. Neuen Branch erstellen (für ein neues Feature)
 ```bash
 git checkout dev
 git pull origin dev
-git checkout -b feature/[kürzel]/[feature-name]
+git checkout -b featurename
 ```
 ### 2. Arbeiten & committen
 ```bash
@@ -37,12 +26,12 @@ git commit -m "feat: kurze beschreibung"
 ```
 Commit-Typen:
 
-- `feat:` neues Feature
+- `add:` neues Feature
 - `fix:` Bugfix
-- `docs:` Dokumentation
+- `update:` 
+- `docs:` 
 - `style:` Formatierung
-- `refactor:` Code verbessern
-- `test:` Tests
+- `refactor:` 
 
 ### 3. Regelmäßig den neuesten Stand von dev holen
 
@@ -50,39 +39,35 @@ Commit-Typen:
 `git log origin/dev --oneline` (erst checken) oder `git lol` aus KONF
 `git merge origin/dev` (einbauen)
 
-Keine Überraschungen beim Pushen!
-
 ### 4. Pushen ( erst nach fetch + merge!)
 
-`git push origin feature/[kürzel]/[feature-name]`
+`git push origin feature`
 
 ---
 
 ## 🧪 Pull Request (PR) Prozess
-1. Sobald dein Feature fertig ist:
+1. Sobald Feature fertig ist:
 
-2. Push deinen Branch (siehe oben)
+2. Push den Branch (siehe oben)
 
 3. Gehe auf GitHub → Pull Requests → New Pull Request
 
 4. Base: `dev`
-   Compare: `feature/[kürzel]/[feature-name]`
+   Compare: `feature`
 
 Titel & Beschreibung ausfüllen
 (Was macht das Feature? Was wurde geändert?)
 
-Mindestens 1 Teammitglied als Reviewer
+Mindestens 1 Teammitglied als Reviewer (bei main 2 bitte)
 
 Warten auf Review
 
 ### Nach dem Review:
-- Bei Änderungswünschen: Nachbessern, committen, pushen (der PR updated sich automatisch!)
-- Wenn approved: Merge (per "Squash and merge" auf GitHub)
-
-Aufräumen: (darüber können wir noch sprechen)
+- Bei Änderungswünschen: Nachbessern, committen, pushen 
+- Wenn der featurebranch nicht mehr gebraucht wird:
 ```bash
-git branch -d feature/[kürzel]/[feature-name]
-git push origin --delete feature/[kürzel]/[feature-name]
+git branch -d feature
+git push origin --delete feature
 ```
 # ⚠️ Wichtige Regeln
 - ✅ Niemals direkt auf main oder dev pushen
@@ -90,9 +75,7 @@ git push origin --delete feature/[kürzel]/[feature-name]
 - ✅ Vor jedem Push: fetch origin + log checken + ggf. merge origin/dev
 - ✅ Commit-Nachrichten immer aussagekräftig
 - ✅ Keine .env-Dateien, Passwörter oder API-Keys committen!
-- ✅ Bei Konflikten: Nicht in Panik verfallen – Team fragen!
+- ✅ Bei Konflikten: Team fragen!
 
 # 🆘 Hilfe & Fragen
-Bei Problemen:
-Im GitHub Issue diskutieren
-Oder direkt im Team-Chat (WhatsApp/Discord) fragen
+sagt bescheid
