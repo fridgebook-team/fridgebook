@@ -1,0 +1,13 @@
+<div class="fridge-container">
+  <h2> My Fridge</h2>
+  
+  <div class="item-list">
+    <div class="item-card" *ngFor="let item of items">
+      <div class="item-name">{{ item.name }}</div>
+      <div class="item-quantity">{{ item.quantity }} {{ item.unit }}</div>
+      <div class="item-expiry" *ngIf="item.expiry">
+         Expires: {{ item.expiry }}
+      </div>
+    </div>
+  </div>
+</div>
