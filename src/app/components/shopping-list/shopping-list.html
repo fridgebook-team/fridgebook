@@ -1,2 +1,35 @@
-<p>shopping-list works!</p>
-<button class="btn btn-primary">Bootstrap Test</button>
+<div class="space-above"></div>
+<div class="container py-4">
+
+  <header class="text-center mb-5">
+    <h1 class="">Deine Einkaufsliste</h1>
+  </header>
+
+  <section class="mb-4">
+    <h6 class="text-uppercase text-muted ls-wide small mb-3">Lebensmittel</h6>
+
+    <div class="list-group">
+      @for (item of items; track item.name) {
+      <div class="list-group-item d-flex justify-content-between align-items-center">
+        <span class="item-text">{{ item.name }}</span>
+        <button (click)="removeItem(item)" class="btn-minus-round">—</button>
+      </div>
+      }
+    </div>
+  </section>
+
+  <section class="mt-2">
+    <div class="mb-3">
+      <input #newItemInput type="text" class="form-control custom-input" placeholder="Zwiebeln, Milch...">
+    </div>
+
+    <button (click)="addItem(newItemInput)" class="btn-olive">
+      HINZUFÜGEN <span class="ms-2">+</span>
+    </button>
+
+    <div class="mt-2 d-flex flex-column gap-2 align-items-start">
+      <button class="btn-beige scan-btn">SCAN BARCODE</button>
+      <button class="btn-beige scan-btn">SCAN RECHNUNG</button>
+    </div>
+  </section>
+</div>
