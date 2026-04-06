@@ -1,1 +1,57 @@
-<p>favorites works!</p>
+<div class="space-above"></div>
+<div class="container py-4">
+
+    <header class="text-center mb-1">
+        <h1 class="">Deine Favoriten!</h1>
+    </header>
+
+    <section>
+        <div class="mb-3 d-flex gap-2 align-items-center justify-content-center">
+            <button class="btn-beige sort-btn dropdown-toggle"><i class="bi bi-clock-fill"></i> 30min.</button>
+            <button class="btn-beige sort-btn"><i class="bi bi-leaf-fill"></i> VEGAN</button>
+        </div>
+    </section>
+
+
+    <div *ngFor="let recipe of recipes" class="recipe-card d-flex mb-3 shadow-sm">
+
+        <div class="image-wrapper" [style.border-color]="recipe.borderColor">
+            <img [src]="recipe.image" alt="Recipe Image">
+        </div>
+
+        <div class="content-wrapper flex-grow-1 p-2">
+            <div class="d-flex justify-content-between align-items-start">
+                <h5 class="fw-bold mb-1">{{ recipe.name }}</h5>
+            </div>
+
+            <div class="details d-flex align-items-center justify-content-between mb-1">
+                <span class="badge-time"><i class="bi bi-clock"></i> {{ recipe.time }}</span>
+                <div class="d-flex gap-2">
+
+                    <i *ngIf="recipe.isVegan" class="bi bi-leaf-fill text-success" style="font-size: 1.5em;"></i>
+                    <i class="bi" [ngClass]="recipe.isFavorite ? 'bi-heart-fill text-danger' : 'bi-heart'" style="font-size: 1.5em;"></i>
+                </div>
+            </div>
+
+            <div class="match-section d-flex align-items-end gap-3 mt-auto">
+                <div class="flex-grow-1">
+                    <span class="match-text d-block mb-1" [style.color]="recipe.borderColor"
+                        style="font-size: 0.8rem; font-weight: bold;">
+                        {{ recipe.matchPercentage }}%
+                    </span>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar" [style.width.%]="recipe.matchPercentage"
+                            [style.background-color]="recipe.borderColor">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-dark">
+                    Jetzt Kochen
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
