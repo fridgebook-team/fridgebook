@@ -1,4 +1,4 @@
-<div class="fridge-container">
+<!-- <div class="fridge-container">
   <h2> My Fridge</h2>
   
   <div class="item-list">
@@ -10,4 +10,60 @@
       </div>
     </div>
   </div>
+</div> -->
+
+<div class="space-above"></div>
+<div class="container py-4">
+  <header class="text-center mb-1">
+    <h1 class="">Deine virtuelle Speisekammer!</h1>
+  </header>
+
+  <section class="mt-0 mb-0">
+    <div class="mb-3 search-container">
+      <input #newItemInput type="text" (input)="onSearch($event)" class="form-control custom-input"
+        placeholder="Zwiebeln, Milch...">
+      <i class="bi bi-search search-icon"></i>
+    </div>
+  </section>
+
+  <section>
+    <div class="mb-3 d-flex gap-2 align-items-center justify-content-center">
+      <button class="btn-beige sort-btn" (click)="setSort('name')"
+        [class.active]="currentSort === 'name'">Alphabetisch</button>
+      <button class="btn-beige sort-btn" (click)="setSort('quantity')"
+        [class.active]="currentSort === 'quantity'">Menge</button>
+      <button class="btn-beige sort-btn" (click)="setSort('expiry')"
+        [class.active]="currentSort === 'expiry'">Älteste</button>
+    </div>
+  </section>
+
+  <section class="mb-4">
+    <h6 class="text-uppercase text-muted ls-wide small mb-3">Lebensmittel</h6>
+
+    <div class="list-group">
+      @for (item of filteredItems; track item.name) {
+      <div class="list-group-item d-flex justify-content-between align-items-center">
+        <span class="item-text">{{ item.name }}</span>
+        <div class="quantity-controls d-flex align-items-center gap-2">
+          <div class="item-quantity">{{ item.quantity }} {{ item.unit }}</div>
+          <button (click)="decreaseQuantity(item)" class="btn-round">-</button>
+          <button (click)="increaseQuantity(item)" class="btn-round">+</button>
+        </div>
+      </div>
+
+      }
+    </div>
+  </section>
+
+  <section class="mt-2 fixed-buttons">
+
+    <!-- Scan Buttons - not implemented yet -->
+    <div class="mt-2 d-flex flex-column gap-2 align-items-start">
+      <button class="btn-beige scan-btn">SCAN BARCODE</button>
+    </div>
+    <div class="mt-2 d-flex justify-content-between gap-2 ">
+      <button class="btn-beige scan-btn">SCAN BARCODE</button>
+      <button class="btn-beige scan-btn">FOTO-KI</button>
+    </div>
+  </section>
 </div>

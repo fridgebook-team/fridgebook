@@ -33,6 +33,7 @@ h2 {
 
 .item-quantity {
   color: #aaa;
+  font-size: smaller;
 }
 
 .item-expiry {
@@ -46,4 +47,19 @@ h2 {
     align-items: flex-start;
     gap: 0.5rem;
   }
+}
+
+.search-container {
+  position: relative;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  right: 5%;
+  top: 55%;
+  transform: translateY(-50%);
+  color: var(--color-dark-text);
+  font-size: 1.4rem;
+  pointer-events: none
 }

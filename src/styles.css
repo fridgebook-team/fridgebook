@@ -31,6 +31,7 @@
   font-weight: 400;
   font-style: normal;
 }
+
 /* Nohemi SemiBold */
 @font-face {
   font-family: 'Nohemi';
@@ -45,7 +46,9 @@ h1 {
   color: var(--color-dark-text);
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   font-family: var(--font-header);
 }
 
@@ -69,19 +72,43 @@ button:hover {
   background: var(--color-oliv);
 }
 
-.btn-minus-round {
+.btn-round {
   background: var(--color-dark-beige);
   color: var(--color-dark-text);
   font-weight: 600;
   font-size: small;
   border: none;
-  padding: 0.25rem 0.5rem;
+  padding: 0;
   cursor: pointer;
   border-radius: 50%;
+  height: 20px;
+  width: 20px;
+
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.fixed-buttons {
+  position: fixed;
+  bottom: 10%; 
+  
+  left: 0;
+  right: 0;
+  padding: 0 20px;
+  z-index: 100; 
+  
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.fixed-action-buttons button {
+  pointer-events: auto;
+  width: fit-content;
 }
 
 .scan-btn {
-  min-width: 200px;
+  min-width: 150px;
 }
 
 .btn-beige {
@@ -102,13 +129,16 @@ button:hover {
   padding: 0.5rem 1rem;
   cursor: pointer;
   border-radius: 50px;
-  
+
 }
 
 /* navbar */
 .navbar {
   background-color: var(--color-dark-text);
   border-radius: 50px;
+  width: 90%;
+  margin: 0 auto;
+  bottom: 2%;
 }
 
 .nav-link i {
@@ -129,12 +159,13 @@ button:hover {
 
 /* temp input */
 .custom-input {
-  border: none;
-  border-radius: 15px;
+  border: 2px solid var(--color-dark-text);
+  border-radius: 50px;
   padding: 10px 20px;
   color: var(--color-dark-text);
   font-family: var(--font-body);
 }
+
 .space-above {
   background-color: var(--color-oliv);
   width: 100%;
