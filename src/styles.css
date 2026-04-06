@@ -133,29 +133,110 @@ button:hover {
 }
 
 /* navbar */
-.navbar {
+
+.container-fluid {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20%; 
+  height: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 1;
+  outline: none;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  
+  width: 20%; 
+  height: 100%;
+  padding: 0 !important;
+  z-index: 1; 
+}
+
+.nav-link.active::before {
+  content: "";
+  position: absolute;
+  
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  
+  width: 80%; 
+  height: 70%;
+  
+  background-color: var(--color-bg-beige);
+  border-radius: 50px;
+  z-index: -1;
+}
+
+.nav-link.active {
+  background-color: transparent !important;
+}
+
+.navbar-custom {
   background-color: var(--color-dark-text);
   border-radius: 50px;
   width: 90%;
+  height: 6%;
   margin: 0 auto;
   bottom: 2%;
 }
 
-.nav-link i {
-  color: var(--color-bg-beige) !important;
-  font-size: 1.2rem;
+.nav-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+  align-items: center;
 }
 
-.nav-link.active i {
-  color: var(--color-dark-text) !important;
-  background-color: var(--color-bg-beige) !important;
-  border-radius: 50px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 25px;
+.nav-link svg {
+  color: var(--color-bg-beige);
+  /* transition: all 0.2s ease; */
+  /* font-size: 1.2rem; */
+
+
+  /* Festgelegte Größe hilft bei der Zentrierung */
+  width: 24px; 
+  height: 24px;
+  
+  /* Das hier zwingt das SVG in die Mitte, falls Flexbox zickt */
+  display: block; 
+  flex-shrink: 0; 
+  
+  overflow: visible !important;
+
 }
+
+
+.nav-link.active {
+  /* background-color: var(--color-bg-beige) !important; */
+  /* border-radius: 50px; */
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* width: 50px; */
+  /* height: 25px; */
+}
+
+.nav-link.active svg {
+  color: var(--color-dark-text) !important;
+}
+
+
+
+
 
 /* temp input */
 .custom-input {
