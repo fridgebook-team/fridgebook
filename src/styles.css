@@ -1,38 +1,144 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import url("bootstrap-icons/font/bootstrap-icons.css");
+
 :root {
-  color-scheme: dark;
+  /* COLORS */
+  color-scheme: light;
+  --color-bg-beige: #FAF5ED;
+  --color-bg-secondary-beige: #F6EBDB;
+  --color-dark-beige: #DBCAA5;
+  --color-dark-red: #68341D;
+  --color-oliv: #958D68;
+  --color-dark-text: #3E2C1F;
+
+  /* FONTS */
+  --font-header: 'Basteleur';
+  --font-body: 'Nohemi', sans-serif;
+}
+
+/* Basteleur */
+@font-face {
+  font-family: 'Basteleur';
+  src: url('assets/Basteleur-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* Nohemi */
+@font-face {
+  font-family: 'Nohemi';
+  src: url('assets/Nohemi-Regular-BF6438cc579d934.woff') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+/* Nohemi SemiBold */
+@font-face {
+  font-family: 'Nohemi';
+  src: url('assets/Nohemi-SemiBold-BF6438cc57db2ff.woff') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Headers */
+h1 {
+  font-size: 1.5 rem;
+  color: var(--color-dark-text);
+}
+
+h1, h2, h3 {
+  font-family: var(--font-header);
 }
 
 body {
-  background: #0a0a0a;
-  color: #e0e0e0;
-  margin: 0;
-  padding: 2rem;
-  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-}
-body {
-  background-color: #1a1a1a;
-  color: #ffffff;  /* ← white text */
-  margin: 0;
-  font-family: system-ui, -apple-system, sans-serif;
-}
-a {
-  color: #80b0ff;
-  text-decoration: none;
+  background-color: var(--color-bg-beige);
+  color: var(--color-dark-text);
+  font-family: var(--font-body);
 }
 
-a:hover {
-  text-decoration: underline;
-}
-
+/* buttons */
 button {
-  background: #2a2a2a;
-  color: #e0e0e0;
-  border: 1px solid #4a4a4a;
+  background: var(--color-dark-beige);
+  color: var(--color-dark-text);
+  font-weight: 600;
+  border: none;
   padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
   cursor: pointer;
 }
 
 button:hover {
-  background: #3a3a3a;
+  background: var(--color-oliv);
+}
+
+.btn-minus-round {
+  background: var(--color-dark-beige);
+  color: var(--color-dark-text);
+  font-weight: 600;
+  font-size: small;
+  border: none;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.scan-btn {
+  min-width: 200px;
+}
+
+.btn-beige {
+  background: var(--color-dark-beige);
+  color: var(--color-dark-text);
+  font-weight: 600;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 50px;
+}
+
+.btn-olive {
+  background: var(--color-oliv);
+  color: var(--color-bg-beige);
+  font-weight: 600;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 50px;
+  
+}
+
+/* navbar */
+.navbar {
+  background-color: var(--color-dark-text);
+  border-radius: 50px;
+}
+
+.nav-link i {
+  color: var(--color-bg-beige) !important;
+  font-size: 1.2rem;
+}
+
+.nav-link.active i {
+  color: var(--color-dark-text) !important;
+  background-color: var(--color-bg-beige) !important;
+  border-radius: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 25px;
+}
+
+/* temp input */
+.custom-input {
+  border: none;
+  border-radius: 15px;
+  padding: 10px 20px;
+  color: var(--color-dark-text);
+  font-family: var(--font-body);
+}
+.space-above {
+  background-color: var(--color-oliv);
+  width: 100%;
+  height: 80px;
+  margin: 0;
+  padding: 0;
 }
