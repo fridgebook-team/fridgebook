@@ -7,7 +7,7 @@ import { Component } from '@angular/core';
   styleUrl: './shopping-list.css',
 })
 export class ShoppingList {
-  
+
   items = [
     { name: 'Banane' },
     { name: 'Apfel' },
@@ -16,7 +16,7 @@ export class ShoppingList {
   //add item to shopping list
   addItem(inputElement: HTMLInputElement) {
     const itemName = inputElement.value.trim();
-    
+
     if (itemName) {
       this.items.push({ name: itemName });
       inputElement.value = '';
