@@ -1,0 +1,14 @@
+.details .icon{
+  border-radius: 50%;
+  background-color: var(--color-dark-beige);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+}
+.details .icon.vegan {
+  background-color: var(--color-green);
+  color: var(--color-bg-beige);
+}

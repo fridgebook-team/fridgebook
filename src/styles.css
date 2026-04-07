@@ -11,6 +11,10 @@
   --color-oliv: #958D68;
   --color-dark-text: #3E2C1F;
 
+  --color-green: #626C3E;
+
+
+
   /* FONTS */
   --font-header: 'Basteleur';
   --font-body: 'Nohemi', sans-serif;
@@ -90,13 +94,13 @@ button:hover {
 
 .fixed-buttons {
   position: fixed;
-  bottom: 10%; 
-  
+  bottom: 10%;
+
   left: 0;
   right: 0;
   padding: 0 20px;
-  z-index: 100; 
-  
+  z-index: 100;
+
   display: flex;
   flex-direction: column;
   pointer-events: none;
@@ -148,7 +152,7 @@ button:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 20%; 
+  width: 20%;
   height: 100%;
   padding: 0 !important;
   margin: 0 !important;
@@ -159,24 +163,24 @@ button:hover {
   align-items: center;
   justify-content: center;
   margin: 0;
-  
-  width: 20%; 
+
+  width: 20%;
   height: 100%;
   padding: 0 !important;
-  z-index: 1; 
+  z-index: 1;
 }
 
 .nav-link.active::before {
   content: "";
   position: absolute;
-  
+
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  
-  width: 80%; 
+
+  width: 80%;
   height: 70%;
-  
+
   background-color: var(--color-bg-beige);
   border-radius: 50px;
   z-index: -1;
@@ -210,13 +214,13 @@ button:hover {
 
 
   /* Festgelegte Größe hilft bei der Zentrierung */
-  width: 24px; 
+  width: 24px;
   height: 24px;
-  
+
   /* Das hier zwingt das SVG in die Mitte, falls Flexbox zickt */
-  display: block; 
-  flex-shrink: 0; 
-  
+  display: block;
+  flex-shrink: 0;
+
   overflow: visible !important;
 
 }
@@ -271,11 +275,13 @@ button:hover {
   border-radius: 20px;
   border: 10px solid white;
 }
+
 .content-wrapper .fw-bold {
   font-size: 1.2em;
   font-family: var(--font-body);
   font-weight: 400;
 }
+
 .content-wrapper .details {
   font-size: x-small;
 }
@@ -303,6 +309,7 @@ button:hover {
   background-color: var(--color-dark-beige);
   border-radius: 10px;
 }
+
 .btn-dark {
   background-color: var(--color-dark-text);
   color: var(--color-bg-beige);
@@ -314,6 +321,44 @@ button:hover {
   border-radius: 50px;
   height: 25px;
 }
-.details .badge-time{
-    font-size: 1em;
+
+.details .badge-time {
+  font-size: 1em;
+}
+
+/* .details .icon{
+  border-radius: 50%;
+  background-color: var(--color-dark-beige);
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+/* vegan switch button */
+.vegan-inactive {
+  
+  background-color: var(--color-bg-beige);
+  color: var(--color-dark-text);
+  font-weight: 600;
+  height: 80%;
+  border: 2px solid var(--color-green);
+  display: flex;
+  align-items: center;
+  height: 35px;
+}
+
+.vegan-active {
+  background-color: var(--color-green);
+  color: var(--color-bg-beige);
+  font-weight: 600;
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  height: 35px;
+}
+.switch-icon {
+  margin-left: 5px;
+  font-size: 1.2em;
 }
