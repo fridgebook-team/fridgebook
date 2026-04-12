@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface FridgeItem {
-  name: string;
-  quantity: number;
-  unit: string;
-  expiry?: string;
-}
+import { FridgeService, FridgeItem } from '../../services/fridge';
 
 @Component({
   selector: 'app-fridge-list',
@@ -19,35 +13,27 @@ export class FridgeListComponent {
   searchTerm: string = '';
   currentSort: 'name' | 'quantity' | 'expiry' = 'name';
 
+  constructor(public fridgeService: FridgeService) {}
 
-  items: FridgeItem[] = [
-    { name: '🥛 Milk', quantity: 1, unit: 'liter', expiry: '2026-03-28' },
-    { name: '🧀 Cheese', quantity: 200, unit: 'g', expiry: '2026-04-15' },
-    { name: '🥚 Eggs', quantity: 6, unit: 'pieces', expiry: '2026-04-10' },
-    { name: '🥬 Lettuce', quantity: 1, unit: 'head', expiry: '2026-03-25' },
-    { name: '🍅 Tomatoes', quantity: 4, unit: 'pieces', expiry: '2026-03-27' }
-  ];
+  get items() {
+    return this.fridgeService.items;
+  }
 
   get filteredItems() {
     let list = this.items.filter(item =>
       item.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
-
     if (this.currentSort === 'name') {
       list.sort((a, b) => {
         const nameA = a.name.replace(/[\u1000-\uFFFF]+/g, '').trim().toLowerCase();
         const nameB = b.name.replace(/[\u1000-\uFFFF]+/g, '').trim().toLowerCase();
-
         return nameA.localeCompare(nameB);
       });
-    }
-    else if (this.currentSort === 'quantity') {
+    } else if (this.currentSort === 'quantity') {
       list.sort((a, b) => b.quantity - a.quantity);
-    }
-    else if (this.currentSort === 'expiry') {
+    } else if (this.currentSort === 'expiry') {
       list.sort((a, b) => new Date(a.expiry || '').getTime() - new Date(b.expiry || '').getTime());
     }
-
     return list;
   }
 
@@ -59,9 +45,8 @@ export class FridgeListComponent {
     this.searchTerm = event.target.value;
   }
 
-  //remove item from shopping list
-  removeItem(item: any) {
-    this.items = this.items.filter(i => i !== item);
+  removeItem(item: FridgeItem) {
+    this.fridgeService.removeItem(item);
   }
 
   increaseQuantity(item: FridgeItem) {
@@ -71,11 +56,10 @@ export class FridgeListComponent {
 
   decreaseQuantity(item: FridgeItem) {
     const step = (item.unit === 'g' || item.unit === 'ml') ? 10 : 1;
-
     if (item.quantity > step) {
       item.quantity -= step;
     } else {
-      this.removeItem(item);
+      this.fridgeService.removeItem(item);
     }
   }
 }
