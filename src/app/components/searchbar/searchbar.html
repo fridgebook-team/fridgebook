@@ -1,0 +1,7 @@
+<div class="searchdiv"><input class="searchinput" type="text" placeholder="  Suchen..." (focus)="isFocused = true" (blur)="isFocused = false"/></div>
+@if (isFocused) {
+  <div class="dropdown">
+    Recent searches...
+  </div>
+  <div class="overlay"></div>
+}

@@ -1,0 +1,20 @@
+.searchdiv {
+  margin-top: 25pt;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.searchinput {
+  width: 80vw;
+  border-radius: 50px;
+  z-index: 1001;
+  position: relative;
+  height: 32pt;
+}
+
+.overlay {
+
+}
+.dropdown {
+
+}
