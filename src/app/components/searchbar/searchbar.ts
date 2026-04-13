@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef } from '@angular/core';
 
 
 @Component({
@@ -8,5 +8,7 @@ import { Component } from '@angular/core';
   styleUrl: './searchbar.css',
 })
 export class Searchbar {
+  @ViewChild('searchinput') searchinput!: ElementRef<HTMLInputElement>;
   isFocused = false;
+
 }
