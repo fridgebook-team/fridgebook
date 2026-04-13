@@ -1,0 +1,19 @@
+<div class="searchbar-container" [class.focused]="isFocused">
+  <input
+    #searchinput
+    class="searchinput"
+    (focus)="isFocused = true"
+    (blur)="isFocused = false"
+  />
+  @if (isFocused) {
+    <div class="dropdown-container">
+      <div class="dropdown-title" (mousedown)="recent('letzte Suche')">Letzte Suchen</div>
+      <div class="dropdown-item" (mousedown)="recent('Pizza')">Pizza</div>
+      <div class="dropdown-item" (mousedown)="recent('Pasta')">Pasta</div>
+      <div class="dropdown-item" (mousedown)="recent('Burger')">Burger</div>
+      <div class="dropdown-item" (mousedown)="recent('Schnitzel')">Schnitzel</div>
+      <div class="dropdown-item" (mousedown)="recent('Pommes')">Pommes</div>
+      <div class="dropdown-item" (mousedown)="recent('Vinegrette')">Vinegrette</div>
+    </div>
+  }
+</div>
