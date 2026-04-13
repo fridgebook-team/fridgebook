@@ -1,0 +1,43 @@
+<div class="scan-container">
+
+  <!-- Kamera-Vorschau -->
+  <video #videoElement autoplay playsinline class="camera-preview"></video>
+
+  <!-- Bild nach dem Fotografieren -->
+  <img *ngIf="capturedImage" [src]="capturedImage" class="captured-image" />
+
+  <!-- Canvas (unsichtbar) -->
+  <canvas #canvasElement style="display:none"></canvas>
+
+  <!-- Buttons -->
+  <div class="buttons">
+    <button *ngIf="!cameraActive && !capturedImage" (click)="startCamera()">
+      Kamera öffnen
+    </button>
+
+    <button *ngIf="cameraActive" (click)="takePicture()">
+      Foto aufnehmen
+    </button>
+
+    <button *ngIf="capturedImage && !isLoading" (click)="reset()">
+      Nochmal
+    </button>
+  </div>
+
+  <!-- Status -->
+  <p *ngIf="statusMessage">{{ statusMessage }}</p>
+
+  <!-- Ladeindikator -->
+  <p *ngIf="isLoading">⏳ KI analysiert den Bon...</p>
+
+  <!-- Erkannte Produkte -->
+  <div *ngIf="products.length > 0" class="product-list">
+    <h3>Erkannte Produkte:</h3>
+    <ul>
+      <li *ngFor="let product of products">
+        {{ product.name }} — {{ product.preis }} €
+      </li>
+    </ul>
+  </div>
+
+</div>
