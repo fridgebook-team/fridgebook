@@ -6,4 +6,8 @@ import { Component } from '@angular/core';
   templateUrl: './popular-recipes.html',
   styleUrl: './popular-recipes.css',
 })
-export class PopularRecipes {}
+export class PopularRecipes {
+  clickPop(rezeptname : string) {
+    console.log(rezeptname + 'wurde geclickt');
+  }
+}

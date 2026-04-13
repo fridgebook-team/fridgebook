@@ -7,23 +7,13 @@
   />
   @if (isFocused) {
     <div class="dropdown-container">
-      <div class="dropdown-title">Letzte Suchen</div>
-      <div class="dropdown-item">Pizza</div>
-      <div class="dropdown-item">Pasta</div>
-      <div class="dropdown-item">Burger</div>
-      <div class="dropdown-item">Schnitzel</div>
-      <div class="dropdown-item">Pommes</div>
-      <div class="dropdown-item">Vinegrette</div>
-    </div>
-  }
-  @if (!isFocused) {
-    <div class="recipe-container">
-      <div class="pop-recipe-title">aktuell beliebteste Gerichten</div>
-      <div class="pop-recipe">Schmackofatz</div>
-      <div class="pop-recipe">beste Essen</div>
-      <div class="pop-recipe">lecka lecka</div>
-      <div class="pop-recipe">Platzhalter 4</div>
-      <div class="pop-recipe-last">Platzhalter 5</div>
+      <div class="dropdown-title" (mousedown)="recent('letzte Suche')">Letzte Suchen</div>
+      <div class="dropdown-item" (mousedown)="recent('Pizza')">Pizza</div>
+      <div class="dropdown-item" (mousedown)="recent('Pasta')">Pasta</div>
+      <div class="dropdown-item" (mousedown)="recent('Burger')">Burger</div>
+      <div class="dropdown-item" (mousedown)="recent('Schnitzel')">Schnitzel</div>
+      <div class="dropdown-item" (mousedown)="recent('Pommes')">Pommes</div>
+      <div class="dropdown-item" (mousedown)="recent('Vinegrette')">Vinegrette</div>
     </div>
   }
 </div>

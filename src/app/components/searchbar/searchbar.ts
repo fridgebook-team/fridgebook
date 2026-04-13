@@ -10,5 +10,7 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 export class Searchbar {
   @ViewChild('searchinput') searchinput!: ElementRef<HTMLInputElement>;
   isFocused = false;
-
+  recent(orna : string) {
+    console.log(orna + ' was clicked');
+  }
 }

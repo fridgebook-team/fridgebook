@@ -53,6 +53,10 @@
 .dropdown-container {
   width: 80vw;
   border: 1px solid black;
+  z-index: 1;
+  position: absolute;
+  background-color: white;
+  margin-top: 42px;
 }
 .recipe-container {
   margin-top: 48pt;
@@ -61,22 +65,25 @@
   border-radius: 30px;
 }
 .pop-recipe-title {
-  height: 48pt;
+  height: 48px;
   padding-left: 15%;
-  margin-top: 4pt;
-  border-bottom: 1pt solid black;
+  margin-top: 4px;
+  border-bottom: 1px solid black;
   font-size: larger;
 }
 .pop-recipe {
   width: 60vw;
-  height: 32pt;
+  height: 32px;
   padding-left: 15%;
-  margin-top: 8pt;
-  border-bottom: 1pt solid black;
+  margin-top: 8px;
+  border-bottom: 1px solid black;
 }
 .pop-recipe-last {
   width: 60vw;
-  height: 32pt;
+  height: 32px;
   padding-left: 15%;
-  margin-top: 8pt;
+  margin-top: 8px;
+}
+.dropdown-item {
+  height: 28px
 }

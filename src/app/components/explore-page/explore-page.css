@@ -3,5 +3,9 @@
   height: 60pt;
   background-color: #958D68;
 } /* REMOVE ASAP and do actual components */
-
+.exppage {
+  display:flex;
+  flex-direction: column;
+  align-items: center;
+}
 
