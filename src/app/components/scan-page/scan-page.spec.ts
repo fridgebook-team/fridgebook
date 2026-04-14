@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ScanPage } from './scan-page';
+import { ScanPageComponent } from './scan-page';
 
-describe('ScanPage', () => {
-  let component: ScanPage;
-  let fixture: ComponentFixture<ScanPage>;
+describe('ScanPageComponent', () => {
+  let component: ScanPageComponent;
+  let fixture: ComponentFixture<ScanPageComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ScanPage],
+      imports: [ScanPageComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ScanPage);
+    fixture = TestBed.createComponent(ScanPageComponent);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

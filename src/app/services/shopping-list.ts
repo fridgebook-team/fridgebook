@@ -25,4 +25,11 @@ export class ShoppingListService {
   removeItem(item: ShoppingItem) {
     this.items = this.items.filter(i => i !== item);
   }
+
+  removeByName(name: string) {
+    const normalizedName = name.trim().toLowerCase();
+    this.items = this.items.filter(
+      item => item.name.trim().toLowerCase() !== normalizedName
+    );
+  }
 }
