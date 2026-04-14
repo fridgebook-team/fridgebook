@@ -1,0 +1,86 @@
+<div class="recipe-page">
+  <section class="recipe-hero">
+    <a routerLink="/favorites" class="back-link">
+      <i class="bi bi-arrow-left"></i>
+      Zurueck
+    </a>
+
+    <div class="hero-card shadow-sm">
+      <div class="hero-image-wrapper">
+        <img [src]="recipe.image" [alt]="recipe.title" class="hero-image" />
+        <div class="hero-badge">{{ recipe.badge }}</div>
+      </div>
+
+      <div class="hero-content">
+        <div class="eyebrow">Rezeptvorlage #{{ recipeId ?? recipe.id }}</div>
+        <h1>{{ recipe.title }}</h1>
+        <p class="subtitle">{{ recipe.subtitle }}</p>
+
+        <div class="meta-grid">
+          <div class="meta-pill">
+            <i class="bi bi-clock-history"></i>
+            <span>{{ recipe.duration }}</span>
+          </div>
+          <div class="meta-pill">
+            <i class="bi bi-bar-chart-line-fill"></i>
+            <span>{{ recipe.difficulty }}</span>
+          </div>
+          <div class="meta-pill">
+            <i class="bi bi-people-fill"></i>
+            <span>{{ recipe.servings }}</span>
+          </div>
+        </div>
+
+        <p class="description">{{ recipe.description }}</p>
+
+        <div class="tag-row">
+          <span *ngFor="let tag of recipe.tags" class="recipe-tag">{{ tag }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-grid">
+    <article class="content-card match-card">
+      <h2>Warum dieses Rezept passt</h2>
+      <p>{{ recipe.matchLabel }}</p>
+      <div class="match-progress">
+        <div class="match-progress-bar"></div>
+      </div>
+      <button class="btn-olive">Zur Einkaufsliste hinzufuegen</button>
+    </article>
+
+    <article class="content-card ingredients-card">
+      <h2>Zutaten</h2>
+      <ul class="ingredient-list">
+        <li *ngFor="let ingredient of recipe.ingredients">
+          <span class="amount">{{ ingredient.amount }}</span>
+          <span>{{ ingredient.name }}</span>
+        </li>
+      </ul>
+    </article>
+
+    <article class="content-card steps-card">
+      <h2>Zubereitung</h2>
+      <div class="step-list">
+        <div *ngFor="let step of recipe.steps; let index = index" class="step-item">
+          <div class="step-number">{{ index + 1 }}</div>
+          <div>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.description }}</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="content-card tips-card">
+      <h2>Kuechen-Tipps</h2>
+      <div class="tips-list">
+        <div *ngFor="let tip of recipe.tips" class="tip-item">
+          <i [class]="tip.icon"></i>
+          <p>{{ tip.text }}</p>
+        </div>
+      </div>
+    </article>
+  </section>
+</div>
