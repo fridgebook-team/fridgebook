@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ScanPageComponent } from './scan-page';
+import { Searchbar } from './searchbar';
 
-describe('ScanPageComponent', () => {
-  let component: ScanPageComponent;
-  let fixture: ComponentFixture<ScanPageComponent>;
+describe('Searchbar', () => {
+  let component: Searchbar;
+  let fixture: ComponentFixture<Searchbar>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ScanPageComponent],
+      imports: [Searchbar],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ScanPageComponent);
+    fixture = TestBed.createComponent(Searchbar);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

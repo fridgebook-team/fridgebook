@@ -45,4 +45,11 @@ export class ShoppingListService {
     await this.db.delete("einkaufsliste", item.id!);
     await this.loadItems(); //lödt db neu ohne entferntes Item
   }
+
+  removeByName(name: string) {
+    const normalizedName = name.trim().toLowerCase();
+    this.items = this.items.filter(
+      item => item.name.trim().toLowerCase() !== normalizedName
+    );
+  }
 }
