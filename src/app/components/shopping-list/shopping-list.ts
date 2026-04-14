@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, ViewChild, ChangeDetectorRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReceiptScanService } from '../../services/receipt-scan';
 import { FridgeService } from '../../services/fridge';
@@ -11,7 +11,7 @@ import Fuse from 'fuse.js';
   templateUrl: './shopping-list.html',
   styleUrl: './shopping-list.css',
 })
-export class ShoppingList {
+export class ShoppingList implements OnInit {
 
   @ViewChild('newItemInput') newItemInputRef!: ElementRef;
   @ViewChild('cameraInput') cameraInput!: ElementRef;
@@ -26,17 +26,40 @@ export class ShoppingList {
     private cdr: ChangeDetectorRef
   ) {}
 
+  async ngOnInit() {
+    await this.shoppingListService.loadItems();
+    this.cdr.detectChanges(); // FORCE UI UPDATE
+  }
+
   get items() {
+    console.log("Component: UI reads items:", this.shoppingListService.items);
     return this.shoppingListService.items;
   }
 
-  addItem(inputElement: HTMLInputElement) {
-    this.shoppingListService.addItem(inputElement.value);
+  async addItem(inputElement: HTMLInputElement) {
+    const result = await this.shoppingListService.addItem(inputElement.value);
+
+    if (result === 'duplicate') {
+      this.statusMessage = 'Bereits vorhanden';
+      this.cdr.detectChanges();
+
+      setTimeout(() => {
+        this.statusMessage = '';
+        this.cdr.detectChanges();
+      }, 2000);
+
+      return;
+    }
+
+    // wenn alles ok
     inputElement.value = '';
+    this.statusMessage = '';
+    this.cdr.detectChanges();
   }
 
-  removeItem(item: ShoppingItem) {
-    this.shoppingListService.removeItem(item);
+  async removeItem(item: ShoppingItem) {
+    await this.shoppingListService.removeItem(item);
+    this.cdr.detectChanges();
   }
 
   openCamera() {
