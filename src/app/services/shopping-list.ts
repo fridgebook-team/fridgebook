@@ -16,9 +16,8 @@ export class ShoppingListService {
   constructor(private db: DbService) {}
 
   async loadItems() {
-    console.log("3: loadItems()");
     this.items = await this.db.getAll("einkaufsliste");
-    console.log("3: items after load:", this.items);
+    console.log("shopping service: items after load:", this.items);
   }
 
   //Hinzufügen

@@ -32,7 +32,6 @@ export class ShoppingList implements OnInit {
   }
 
   get items() {
-    console.log("Component: UI reads items:", this.shoppingListService.items);
     return this.shoppingListService.items;
   }
 
@@ -91,21 +90,25 @@ export class ShoppingList implements OnInit {
       });
 
       // Schritt 3: Fuse.js Matching gegen Einkaufsliste
-      const fuse = new Fuse(this.items, {
+      let removed = 0;
+
+      for (const scanned of scannedProducts) {
+
+      const fuse = new Fuse(this.items, { //immer aktuelle Liste
         keys: ['name'],
         threshold: 0.4,
         includeScore: true
       });
 
-      let removed = 0;
-      scannedProducts.forEach(scanned => {
-        const results = fuse.search(scanned.name);
-        if (results.length > 0 && results[0].score! < 0.4) {
-          const match = results[0].item;
-          this.shoppingListService.removeItem(match);
-          removed++;
-        }
-      });
+      const results = fuse.search(scanned.name.toLowerCase());
+
+      if (results.length > 0 && results[0].score! < 0.4) {
+        const match = results[0].item;
+
+        await this.shoppingListService.removeItem(match);
+        removed++;
+      }
+    }
 
       this.statusMessage = removed > 0
         ? `${removed} Produkte von der Liste entfernt!`

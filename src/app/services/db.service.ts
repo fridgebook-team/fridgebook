@@ -68,6 +68,21 @@ export class DbService {
         });
     }
 
+    // Update (überschreibt bestehenden Eintrag)
+    async update(storeName: string, item: any): Promise<any> {
+        await this.dbReady;
+
+        return new Promise((resolve, reject) => {
+            const transaction = this.db.transaction(storeName, "readwrite");
+            const store = transaction.objectStore(storeName);
+
+            const request = store.put(item); //put = update oder insert
+
+            request.onsuccess = () => resolve(request.result);
+            request.onerror = reject;
+        });
+    }
+
     // Suchen (alle)
     async getAll(storeName: string): Promise<any[]> {
         console.log("2: getAll called:", storeName);
