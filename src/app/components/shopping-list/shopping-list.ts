@@ -1,10 +1,13 @@
+
 import {
   ChangeDetectorRef,
   Component,
   ElementRef,
   OnDestroy,
   ViewChild,
+  OnInit
 } from '@angular/core';
+
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReceiptScanService } from '../../services/receipt-scan';
@@ -34,7 +37,8 @@ type BarcodeDetectorConstructor = new (options?: {
   templateUrl: './shopping-list.html',
   styleUrl: './shopping-list.css',
 })
-export class ShoppingList implements OnDestroy {
+
+export class ShoppingList implements OnInit, OnDestroy {
   @ViewChild('newItemInput') newItemInputRef!: ElementRef;
   @ViewChild('cameraInput') cameraInput!: ElementRef;
   @ViewChild('barcodeVideo') barcodeVideo?: ElementRef<HTMLVideoElement>;
@@ -62,17 +66,39 @@ export class ShoppingList implements OnDestroy {
     private cdr: ChangeDetectorRef
   ) {}
 
+  async ngOnInit() {
+    await this.shoppingListService.loadItems();
+    this.cdr.detectChanges(); // FORCE UI UPDATE
+  }
+
   get items() {
     return this.shoppingListService.items;
   }
 
-  addItem(inputElement: HTMLInputElement) {
-    this.shoppingListService.addItem(inputElement.value);
+  async addItem(inputElement: HTMLInputElement) {
+    const result = await this.shoppingListService.addItem(inputElement.value);
+
+    if (result === 'duplicate') {
+      this.statusMessage = 'Bereits vorhanden';
+      this.cdr.detectChanges();
+
+      setTimeout(() => {
+        this.statusMessage = '';
+        this.cdr.detectChanges();
+      }, 2000);
+
+      return;
+    }
+
+    // wenn alles ok
     inputElement.value = '';
+    this.statusMessage = '';
+    this.cdr.detectChanges();
   }
 
-  removeItem(item: ShoppingItem) {
-    this.shoppingListService.removeItem(item);
+  async removeItem(item: ShoppingItem) {
+    await this.shoppingListService.removeItem(item);
+    this.cdr.detectChanges();
   }
 
   openCamera() {
@@ -224,21 +250,25 @@ export class ShoppingList implements OnDestroy {
       });
 
       // Schritt 3: Fuse.js Matching gegen Einkaufsliste
-      const fuse = new Fuse(this.items, {
+      let removed = 0;
+
+      for (const scanned of scannedProducts) {
+
+      const fuse = new Fuse(this.items, { //immer aktuelle Liste
         keys: ['name'],
         threshold: 0.4,
         includeScore: true
       });
 
-      let removed = 0;
-      scannedProducts.forEach(scanned => {
-        const results = fuse.search(scanned.name);
-        if (results.length > 0 && results[0].score! < 0.4) {
-          const match = results[0].item;
-          this.shoppingListService.removeItem(match);
-          removed++;
-        }
-      });
+      const results = fuse.search(scanned.name.toLowerCase());
+
+      if (results.length > 0 && results[0].score! < 0.4) {
+        const match = results[0].item;
+
+        await this.shoppingListService.removeItem(match);
+        removed++;
+      }
+    }
 
       this.statusMessage = removed > 0
         ? `${removed} Produkte von der Liste entfernt!`

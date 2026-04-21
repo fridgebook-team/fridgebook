@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
+import { DbService } from './db.service';
 
 export interface ShoppingItem {
+  id?: number;
   name: string;
 }
 
@@ -9,21 +11,39 @@ export interface ShoppingItem {
 })
 export class ShoppingListService {
 
-  items: ShoppingItem[] = [
-    { name: 'Banane' },
-    { name: 'Apfel' },
-    { name: 'Kopfsalat' },
-    { name: 'Milch' },
-  ];
+  items: ShoppingItem[] = [];
 
-  addItem(name: string) {
-    if (name.trim()) {
-      this.items.push({ name: name.trim() });
-    }
+  constructor(private db: DbService) {}
+
+  async loadItems() {
+    this.items = await this.db.getAll("einkaufsliste");
+    console.log("shopping service: items after load:", this.items);
   }
 
-  removeItem(item: ShoppingItem) {
-    this.items = this.items.filter(i => i !== item);
+  //Hinzufügen
+  async addItem(name: string) {
+    console.log("service shopping-list: addItem:", name);
+    const normalized = name.trim().toLowerCase();
+    
+    const existing = this.items.find(
+      i => i.name.toLowerCase() === normalized
+    );
+
+    if (existing) {
+      console.log("duplicate blocked"); //irgendwie für user zeigen
+      return 'duplicate'; //keine Duplikate - ‘duplicate‘ für component
+    }
+
+    await this.db.add("einkaufsliste", { name });
+    await this.loadItems(); //lödt db neu mit neuem Item
+
+    return 'ok';
+  }
+
+  //Entfernen
+  async removeItem(item: ShoppingItem) {
+    await this.db.delete("einkaufsliste", item.id!);
+    await this.loadItems(); //lödt db neu ohne entferntes Item
   }
 
   removeByName(name: string) {

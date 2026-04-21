@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FridgeService, FridgeItem } from '../../services/fridge';
 
@@ -9,11 +9,19 @@ import { FridgeService, FridgeItem } from '../../services/fridge';
   templateUrl: './fridge-list.html',
   styleUrls: ['./fridge-list.css']
 })
-export class FridgeListComponent {
+export class FridgeListComponent implements OnInit {
   searchTerm: string = '';
   currentSort: 'name' | 'quantity' | 'expiry' = 'name';
 
-  constructor(public fridgeService: FridgeService) {}
+  constructor(
+    public fridgeService: FridgeService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  async ngOnInit() {
+    await this.fridgeService.loadItems();
+    this.cdr.detectChanges(); // UI update
+  }
 
   get items() {
     return this.fridgeService.items;
@@ -23,6 +31,7 @@ export class FridgeListComponent {
     let list = this.items.filter(item =>
       item.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
+
     if (this.currentSort === 'name') {
       list.sort((a, b) => {
         const nameA = a.name.replace(/[\u1000-\uFFFF]+/g, '').trim().toLowerCase();
@@ -45,21 +54,28 @@ export class FridgeListComponent {
     this.searchTerm = event.target.value;
   }
 
-  removeItem(item: FridgeItem) {
-    this.fridgeService.removeItem(item);
+  async removeItem(item: FridgeItem) {
+    await this.fridgeService.removeItem(item);
+    this.cdr.detectChanges(); // UI update
   }
 
-  increaseQuantity(item: FridgeItem) {
+  async increaseQuantity(item: FridgeItem) {
     const step = (item.unit === 'g' || item.unit === 'ml') ? 10 : 1;
     item.quantity += step;
+
+    await this.fridgeService.updateItem(item); // WICHTIG DB sync
+    this.cdr.detectChanges();
   }
 
-  decreaseQuantity(item: FridgeItem) {
+  async decreaseQuantity(item: FridgeItem) {
     const step = (item.unit === 'g' || item.unit === 'ml') ? 10 : 1;
+
     if (item.quantity > step) {
       item.quantity -= step;
+      await this.fridgeService.updateItem(item);
     } else {
-      this.fridgeService.removeItem(item);
+      await this.fridgeService.removeItem(item);
     }
+    this.cdr.detectChanges();
   }
 }
