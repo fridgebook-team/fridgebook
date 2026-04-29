@@ -22,6 +22,13 @@
                 </ul>
             </div>
 
+            <!--VEGGIE & VEGAN BUTTONS-->
+            <button class="btn-beige sort-btn btn-vegan" (click)="toggleVeggie()"
+                [ngClass]="veggieFilterOn ? 'vegan-active' : 'vegan-inactive'">
+
+                <i class="bi bi-leaf-fill"></i> VEGGIE
+                <i class="bi switch-icon" [ngClass]="veggieFilterOn ? 'bi-toggle-on' : 'bi-toggle-off'"></i>
+            </button>
             <button class="btn-beige sort-btn btn-vegan" (click)="toggleVegan()"
                 [ngClass]="veganFilterOn ? 'vegan-active' : 'vegan-inactive'">
 

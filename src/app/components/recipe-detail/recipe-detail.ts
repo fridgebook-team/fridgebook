@@ -53,7 +53,7 @@ export class RecipeDetailComponent {
     matchLabel: 'Du hast bereits die meisten Zutaten zuhause und musst nur wenig dazukaufen.',
     description:
       'Ein warmes Pasta-Gericht mit viel Geschmack, einer cremigen Sauce und genug Frische, damit es trotz Comfort Food leicht wirkt.',
-    tags: ['Vegetarisch', 'Schnell', 'Abendessen'],
+    tags: ['Vegan','Vegetarisch', 'Schnell', 'Abendessen'],
     ingredients: [
       { amount: '250 g', name: 'Ravioli' },
       { amount: '1 EL', name: 'Olivenoel' },
