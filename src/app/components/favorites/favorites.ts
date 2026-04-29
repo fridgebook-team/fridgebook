@@ -90,6 +90,7 @@ export class Favorites implements OnInit {
   ];
 
   ngOnInit() {
+    this.veganFilterOn = document.documentElement.classList.contains('vegan');
     this.applyFilters();
   }
 
@@ -101,11 +102,7 @@ export class Favorites implements OnInit {
   toggleVegan() {
     this.veganFilterOn = !this.veganFilterOn;
 
-    if (this.veganFilterOn) {
-      document.documentElement.classList.add('vegan');
-    } else {
-      document.documentElement.classList.remove('vegan');
-    }
+    document.documentElement.classList.toggle('vegan', this.veganFilterOn);
 
     this.applyFilters();
   }
