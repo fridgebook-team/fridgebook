@@ -100,6 +100,13 @@ export class Favorites implements OnInit {
 
   toggleVegan() {
     this.veganFilterOn = !this.veganFilterOn;
+
+    if (this.veganFilterOn) {
+      document.documentElement.classList.add('vegan');
+    } else {
+      document.documentElement.classList.remove('vegan');
+    }
+
     this.applyFilters();
   }
 

@@ -20,6 +20,15 @@
   --font-body: 'Nohemi', sans-serif;
 }
 
+.vegan {
+  --color-bg-beige: #edfaf1;
+  --color-bg-secondary-beige: #dbf6e4;
+  --color-dark-beige: #a5dbb8;
+  --color-dark-red: #683c1d;
+  --color-oliv: #689577;
+  --color-dark-text: #1f3e2a;
+}
+
 /* Basteleur */
 @font-face {
   font-family: 'Basteleur';
