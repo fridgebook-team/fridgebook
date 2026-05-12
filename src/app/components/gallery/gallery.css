@@ -1,0 +1,16 @@
+.gallery-window {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+  
+}
+
+.gallery-track {
+  display: flex;
+}
+
+.gallery-slide {
+  flex: 0 0 40%;
+  text-align: center;
+  
+}
