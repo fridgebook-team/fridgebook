@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Icon } from '../icon/icon';
 import { RouterLink } from '@angular/router';
-
+import { FavoritesService } from '../../services/favorites';
 
 @Component({
   selector: 'app-favorites',
@@ -14,6 +14,11 @@ export class Favorites implements OnInit {
   selectedTime: string = '30 min.';
   veganFilterOn: boolean = false;
   veggieFilterOn: boolean = false;
+
+  constructor(
+    public favoritesService: FavoritesService,
+    private cdr: ChangeDetectorRef
+  ) {}
 
   filteredRecipes: Recipe[] = [];
 
@@ -97,10 +102,17 @@ export class Favorites implements OnInit {
     }
   ];
 
-  ngOnInit() {
-    this.veganFilterOn = document.documentElement.classList.contains('vegan');
-    this.veggieFilterOn = document.documentElement.classList.contains('veggie');
+  async ngOnInit() {
+    await this.favoritesService.loadFavorites();
+
+    this.veganFilterOn = document.documentElement.classList.contains('vegan') || false;
+    this.veggieFilterOn = document.documentElement.classList.contains('veggie') || false;
+
+    //initial rendern
+    this.filteredRecipes = [...this.recipes];
+
     this.applyFilters();
+    this.cdr.detectChanges();
   }
 
   setTimeFilter(time: string) {
@@ -129,11 +141,27 @@ export class Favorites implements OnInit {
     
     this.applyFilters();
   }
+  
+  async toggleFavorite(recipe: Recipe) {
+    await this.favoritesService.toggleFavorite(recipe.id);
+
+    //neue favoriten (ohne die gelöschte) laden
+    await this.favoritesService.loadFavorites();
+    this.applyFilters();
+    this.cdr.detectChanges();
+  }
 
   applyFilters() {
     const timeLimit = parseInt(this.selectedTime);
 
+    const favIds = this.favoritesService.favoriteIds;
+
     this.filteredRecipes = this.recipes.filter(recipe => {
+
+      // nur Favorites anzeigen
+      const isFavorite = favIds.includes(recipe.id);
+      if (!isFavorite) return false;
+
       const recipeTime = parseInt(recipe.time);
       const matchesTime = recipeTime <= timeLimit;
 
@@ -143,13 +171,6 @@ export class Favorites implements OnInit {
       return matchesTime && matchesVegan && matchesVeggie;
     });
   }
-
-  toggleFavorite(recipe: Recipe) {
-    recipe.isFavorite = !recipe.isFavorite;
-
-    this.applyFilters();
-  }
-
 
 }
 
