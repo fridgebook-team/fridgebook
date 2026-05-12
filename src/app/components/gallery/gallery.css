@@ -1,16 +1,29 @@
-.gallery-window {
-  width: 100%;
-  overflow: hidden;
-  position: relative;
-  
+.galleryview {
+    width: 80%;
+    max-width: 1000px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: #2a2a2a;
+    border-radius: 16px;
+    padding: 20px 0;
 }
 
-.gallery-track {
-  display: flex;
+.gallerystripe {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: fit-content;
+    padding: 0 20px;
 }
 
-.gallery-slide {
-  flex: 0 0 40%;
-  text-align: center;
-  
+.galleryelement {
+    flex: 0 0 200px;
+    height: 200px;
+    background: var(--color-oliv);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
 }

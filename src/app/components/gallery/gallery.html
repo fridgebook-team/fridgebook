@@ -1,13 +1,7 @@
-<div class="gallery-window">
-  <div class="gallery-track">
-    <div class="gallery-slide">
-      <app-display-card></app-display-card>
+<div class="galleryview">
+    <div class="gallerystripe">
+        <div *ngFor="let card of cards" class="galleryelement">
+            {{ card }}
+        </div>
     </div>
-    <div class="gallery-slide">
-      <app-display-card></app-display-card>
-    </div>
-    <div class="gallery-slide">
-      <app-display-card></app-display-card>
-    </div>
-  </div>
 </div>

@@ -1,10 +1,13 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { DisplayCard } from '../display-card/display-card';
+
 @Component({
   selector: 'app-gallery',
-  imports: [DisplayCard],
+  imports: [CommonModule],
   standalone: true,
   templateUrl: './gallery.html',
-  styleUrl: './gallery.css',
+  styleUrls: ['./gallery.css']
 })
-export class Gallery {}
+export class Gallery {
+  cards = [1, 2, 3, 4, 5, 6, 7, 8];
+}
