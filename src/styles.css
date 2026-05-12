@@ -20,6 +20,24 @@
   --font-body: 'Nohemi', sans-serif;
 }
 
+.vegan {
+  --color-bg-beige: #edfaf1;
+  --color-bg-secondary-beige: #dbf6e4;
+  --color-dark-beige: #a5dbb8;
+  --color-dark-red: #381938;
+  --color-oliv: #689577;
+  --color-dark-text: #1f3e2a;
+}
+
+.veggie {
+  --color-bg-beige: #edf9fa;
+  --color-bg-secondary-beige: #dbf6f6;
+  --color-dark-beige: #a5d5db;
+  --color-dark-red: #1d5768;
+  --color-oliv: #688e95;
+  --color-dark-text: #1f3c3e;
+}
+
 /* Basteleur */
 @font-face {
   font-family: 'Basteleur';
