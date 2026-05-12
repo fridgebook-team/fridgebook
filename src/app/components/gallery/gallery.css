@@ -1,0 +1,29 @@
+.galleryview {
+    width: 80%;
+    max-width: 1000px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    background: #2a2a2a;
+    border-radius: 16px;
+    padding: 20px 0;
+}
+
+.gallerystripe {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    width: fit-content;
+    padding: 0 20px;
+}
+
+.galleryelement {
+    flex: 0 0 200px;
+    height: 200px;
+    background: var(--color-oliv);
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-size: 24px;
+}
