@@ -8,7 +8,7 @@
     <div class="hero-card shadow-sm">
       <div class="hero-image-wrapper">
         <img [src]="recipe.image" [alt]="recipe.title" class="hero-image" />
-        <div class="hero-badge">{{ recipe.badge }}</div>
+        <div class="hero-badge">{{ matchPercentage }}% Match mit deinem Kuehlschrank</div>
       </div>
 
       <div class="hero-content">
@@ -47,11 +47,17 @@
   <section class="content-grid">
     <article class="content-card match-card">
       <h2>Warum dieses Rezept passt</h2>
-      <p>{{ recipe.matchLabel }}</p>
+      <p>Du hast bereits {{ matchPercentage }}% der Zutaten zuhause.</p>
       <div class="match-progress">
-        <div class="match-progress-bar"></div>
+        <div class="match-progress-bar" [style.width.%]="matchPercentage"></div>
       </div>
-      <button class="btn-olive">Zur Einkaufsliste hinzufuegen</button>
+
+      <h3>Fehlende Zutaten</h3>
+      <ul>
+        <li *ngFor="let ingredient of missingIngredients">{{ ingredient }}</li>
+      </ul>
+
+      <button class="btn-olive" (click)="addMissingToShoppingList()">Zur Einkaufsliste hinzufuegen</button>
     </article>
 
     <article class="content-card ingredients-card">

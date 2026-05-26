@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FridgeService } from '../../services/fridge';
+import { ShoppingListService } from '../../services/shopping-list';
 
 interface RecipeStep {
   title: string;
@@ -40,7 +42,7 @@ interface RecipeDetail {
   templateUrl: './recipe-detail.html',
   styleUrl: './recipe-detail.css',
 })
-export class RecipeDetailComponent {
+export class RecipeDetailComponent implements OnInit {
   readonly recipe: RecipeDetail = {
     id: 0,
     title: 'Creamy Tuscan Ravioli',
@@ -56,10 +58,10 @@ export class RecipeDetailComponent {
     tags: ['Vegan','Vegetarisch', 'Schnell', 'Abendessen'],
     ingredients: [
       { amount: '250 g', name: 'Ravioli' },
-      { amount: '1 EL', name: 'Olivenoel' },
+      { amount: '1 EL', name: 'Olivenöl' },
       { amount: '2 Zehen', name: 'Knoblauch' },
       { amount: '120 g', name: 'Kirschtomaten' },
-      { amount: '80 g', name: 'Spinat' },
+      { amount: '80 g', name: 'Samen' },
       { amount: '150 ml', name: 'Sahne oder Kochcreme' },
       { amount: '40 g', name: 'Parmesan' },
       { amount: 'nach Geschmack', name: 'Salz, Pfeffer, Chili' },
@@ -94,9 +96,61 @@ export class RecipeDetailComponent {
 
   readonly recipeId: string | null;
 
-  constructor(route: ActivatedRoute) {
+  constructor(
+    route: ActivatedRoute,
+    private fridgeService: FridgeService,
+    private shoppingListService: ShoppingListService,
+    private cdr: ChangeDetectorRef
+  ) {
     this.recipeId = route.snapshot.paramMap.get('id');
   }
+
+  
+  //BERECHNUNG VON ZUTATEN-KÜHLSCHRANK-MATCH
+
+  async ngOnInit() {
+    await this.fridgeService.loadItems();
+
+    this.calculateMatch();
+    this.cdr.detectChanges();
+  }
+
+  matchPercentage = 0;
+  missingIngredients: string[] = [];
+
+  calculateMatch() {
+
+    const fridge = this.fridgeService.items.map(item => item.name.toLowerCase().trim()); //Kühlschrank
+    const recipeIngredients = this.recipe.ingredients.map(i => i.name.toLowerCase().trim()); //Zutaten
+
+    let matched = 0;
+    this.missingIngredients = [];
+
+    recipeIngredients.forEach(ingredient => {
+
+      const exists = fridge.some(fridgeItem =>
+        fridgeItem.includes(ingredient) ||
+        ingredient.includes(fridgeItem)
+      );
+
+      if (exists) {
+        matched++;
+      } else {
+        this.missingIngredients.push(ingredient);
+      }
+    });
+
+    this.matchPercentage = Math.round( (matched / recipeIngredients.length) * 100 );
+  }
+
+  async addMissingToShoppingList() {
+    for (const ingredient of this.missingIngredients) {
+      await this.shoppingListService.addItem(ingredient);
+    }
+  }
+
+
+  // BERECHNUNG DER PORTIONEN
 
   currentServings = this.recipe.servings;
 
