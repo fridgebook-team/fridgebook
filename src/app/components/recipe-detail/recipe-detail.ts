@@ -25,7 +25,7 @@ interface RecipeDetail {
   badge: string;
   duration: string;
   difficulty: string;
-  servings: string;
+  servings: number;
   matchLabel: string;
   description: string;
   tags: string[];
@@ -49,7 +49,7 @@ export class RecipeDetailComponent {
     badge: '75% Match mit deinem Kuehlschrank',
     duration: '15 Min.',
     difficulty: 'Einfach',
-    servings: '2 Portionen',
+    servings: 2,
     matchLabel: 'Du hast bereits die meisten Zutaten zuhause und musst nur wenig dazukaufen.',
     description:
       'Ein warmes Pasta-Gericht mit viel Geschmack, einer cremigen Sauce und genug Frische, damit es trotz Comfort Food leicht wirkt.',
@@ -96,5 +96,27 @@ export class RecipeDetailComponent {
 
   constructor(route: ActivatedRoute) {
     this.recipeId = route.snapshot.paramMap.get('id');
+  }
+
+  currentServings = this.recipe.servings;
+
+  increaseServings() { 
+    this.currentServings++; 
+  }
+
+  decreaseServings() {
+    if (this.currentServings > 1) { this.currentServings--; }
+  }
+
+  getIngredientAmount(amount: string): string {
+
+    const numberMatch = amount.match(/[\d.]+/); //Zahl finden
+
+    if (!numberMatch) return amount;
+
+    const originalNumber = parseFloat(numberMatch[0]);
+
+    const scaledNumber = (originalNumber / this.recipe.servings) * this.currentServings; //neue Menge
+    return amount.replace(numberMatch[0], scaledNumber.toString()); //ersetzen
   }
 }

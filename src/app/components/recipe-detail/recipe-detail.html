@@ -27,7 +27,11 @@
           </div>
           <div class="meta-pill">
             <i class="bi bi-people-fill"></i>
-            <span>{{ recipe.servings }}</span>
+            <div class="d-flex align-items-center gap-2">
+              <span>{{ currentServings }} Portionen</span>
+              <button class="btn-round" (click)="decreaseServings()">-</button>
+              <button class="btn-round" (click)="increaseServings()">+</button>
+          </div>
           </div>
         </div>
 
@@ -54,7 +58,7 @@
       <h2>Zutaten</h2>
       <ul class="ingredient-list">
         <li *ngFor="let ingredient of recipe.ingredients">
-          <span class="amount">{{ ingredient.amount }}</span>
+          <span class="amount">{{ getIngredientAmount(ingredient.amount) }}</span>
           <span>{{ ingredient.name }}</span>
         </li>
       </ul>
