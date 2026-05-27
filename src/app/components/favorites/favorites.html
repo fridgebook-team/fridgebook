@@ -69,8 +69,11 @@
                     <app-icon *ngIf="recipe.isVegan" name="leafvegan" class="icon vegan">
                     </app-icon>
 
-                    <app-icon name="heart" class="icon heart"
-                        (click)="toggleFavorite(recipe)">
+                    <app-icon
+                        name="heart"
+                        class="icon heart"
+                        (click)="toggleFavorite(recipe)"
+                        [ngClass]="favoritesService.isFavorite(recipe.id) ? 'active-heart' : ''">
                     </app-icon>
                 </div>
             </div>

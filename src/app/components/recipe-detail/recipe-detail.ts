@@ -117,6 +117,7 @@ export class RecipeDetailComponent implements OnInit {
 
   matchPercentage = 0;
   missingIngredients: string[] = [];
+  showAddMessage = false;
 
   calculateMatch() {
 
@@ -143,10 +144,13 @@ export class RecipeDetailComponent implements OnInit {
     this.matchPercentage = Math.round( (matched / recipeIngredients.length) * 100 );
   }
 
+
   async addMissingToShoppingList() {
     for (const ingredient of this.missingIngredients) {
       await this.shoppingListService.addItem(ingredient);
     }
+    this.showAddMessage = true;
+    this.cdr.detectChanges();
   }
 
 

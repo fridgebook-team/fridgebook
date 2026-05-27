@@ -57,7 +57,8 @@
         <li *ngFor="let ingredient of missingIngredients">{{ ingredient }}</li>
       </ul>
 
-      <button class="btn-olive" (click)="addMissingToShoppingList()">Zur Einkaufsliste hinzufuegen</button>
+      <button class="btn-olive btn" (click)="addMissingToShoppingList()">Zur Einkaufsliste hinzufuegen</button>
+      <p *ngIf="showAddMessage" class="mt-3 mx-2 success-message">Zutaten wurden hinzugefügt!</p>
     </article>
 
     <article class="content-card ingredients-card">
