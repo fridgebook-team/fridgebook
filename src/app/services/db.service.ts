@@ -22,7 +22,7 @@ export class DbService {
     // öffnen bzw erstellt FridgeBookDB
     private initDB() {
         this.dbReady = new Promise((resolve, reject) => {
-            const request = this.indexedDB.open("FridgeBookDB", 1);
+            const request = this.indexedDB.open("FridgeBookDB", 3);
 
             // checkt zuerst nach error bei request
             request.onerror = (event: any) => {
@@ -34,16 +34,25 @@ export class DbService {
             request.onupgradeneeded = () => {
                 const fbdb = request.result; //FridgeBookDB
 
-                const eklstore = fbdb.createObjectStore("einkaufsliste", { keyPath: "id", autoIncrement: true });
+                if (!fbdb.objectStoreNames.contains("einkaufsliste")) {
+                        fbdb.createObjectStore("einkaufsliste", { keyPath: "id", autoIncrement: true });
+                    }          
                 // eklstore.colorIndex("eklItem_color", ["color"], { unique: false }); -- nach Index kann gesucht werden
 
-                const foodstore = fbdb.createObjectStore("lebensmittel", { keyPath: "id", autoIncrement: true });
+                if (!fbdb.objectStoreNames.contains("lebensmittel")) {
+                        fbdb.createObjectStore("lebensmittel", { keyPath: "id", autoIncrement: true });
+                    }                
                 // hier speichern wir zusätzlich: name, menge, ablaufdatum, hinzugefügt am
+
+                if (!fbdb.objectStoreNames.contains("favorites")) {
+                        fbdb.createObjectStore("favorites", { keyPath: "id" });
+                    }                
+                //hier werden ids der favourite recipes gespeichert
             };
 
             request.onsuccess = () => { 
                 this.db = request.result; //FridgeBookDB 
-                console.log("1: DB READY");
+                console.log("DB READY");
                 resolve();
             }; 
             request.onerror = (e) => {

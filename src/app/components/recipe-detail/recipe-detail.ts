@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { FridgeService } from '../../services/fridge';
+import { ShoppingListService } from '../../services/shopping-list';
 
 interface RecipeStep {
   title: string;
@@ -25,7 +27,7 @@ interface RecipeDetail {
   badge: string;
   duration: string;
   difficulty: string;
-  servings: string;
+  servings: number;
   matchLabel: string;
   description: string;
   tags: string[];
@@ -40,7 +42,7 @@ interface RecipeDetail {
   templateUrl: './recipe-detail.html',
   styleUrl: './recipe-detail.css',
 })
-export class RecipeDetailComponent {
+export class RecipeDetailComponent implements OnInit {
   readonly recipe: RecipeDetail = {
     id: 0,
     title: 'Creamy Tuscan Ravioli',
@@ -49,17 +51,17 @@ export class RecipeDetailComponent {
     badge: '75% Match mit deinem Kuehlschrank',
     duration: '15 Min.',
     difficulty: 'Einfach',
-    servings: '2 Portionen',
+    servings: 2,
     matchLabel: 'Du hast bereits die meisten Zutaten zuhause und musst nur wenig dazukaufen.',
     description:
       'Ein warmes Pasta-Gericht mit viel Geschmack, einer cremigen Sauce und genug Frische, damit es trotz Comfort Food leicht wirkt.',
     tags: ['Vegan','Vegetarisch', 'Schnell', 'Abendessen'],
     ingredients: [
       { amount: '250 g', name: 'Ravioli' },
-      { amount: '1 EL', name: 'Olivenoel' },
+      { amount: '1 EL', name: 'Olivenöl' },
       { amount: '2 Zehen', name: 'Knoblauch' },
       { amount: '120 g', name: 'Kirschtomaten' },
-      { amount: '80 g', name: 'Spinat' },
+      { amount: '80 g', name: 'Samen' },
       { amount: '150 ml', name: 'Sahne oder Kochcreme' },
       { amount: '40 g', name: 'Parmesan' },
       { amount: 'nach Geschmack', name: 'Salz, Pfeffer, Chili' },
@@ -94,7 +96,85 @@ export class RecipeDetailComponent {
 
   readonly recipeId: string | null;
 
-  constructor(route: ActivatedRoute) {
+  constructor(
+    route: ActivatedRoute,
+    private fridgeService: FridgeService,
+    private shoppingListService: ShoppingListService,
+    private cdr: ChangeDetectorRef
+  ) {
     this.recipeId = route.snapshot.paramMap.get('id');
+  }
+
+  
+  //BERECHNUNG VON ZUTATEN-KÜHLSCHRANK-MATCH
+
+  async ngOnInit() {
+    await this.fridgeService.loadItems();
+
+    this.calculateMatch();
+    this.cdr.detectChanges();
+  }
+
+  matchPercentage = 0;
+  missingIngredients: string[] = [];
+  showAddMessage = false;
+
+  calculateMatch() {
+
+    const fridge = this.fridgeService.items.map(item => item.name.toLowerCase().trim()); //Kühlschrank
+    const recipeIngredients = this.recipe.ingredients.map(i => i.name.toLowerCase().trim()); //Zutaten
+
+    let matched = 0;
+    this.missingIngredients = [];
+
+    recipeIngredients.forEach(ingredient => {
+
+      const exists = fridge.some(fridgeItem =>
+        fridgeItem.includes(ingredient) ||
+        ingredient.includes(fridgeItem)
+      );
+
+      if (exists) {
+        matched++;
+      } else {
+        this.missingIngredients.push(ingredient);
+      }
+    });
+
+    this.matchPercentage = Math.round( (matched / recipeIngredients.length) * 100 );
+  }
+
+
+  async addMissingToShoppingList() {
+    for (const ingredient of this.missingIngredients) {
+      await this.shoppingListService.addItem(ingredient);
+    }
+    this.showAddMessage = true;
+    this.cdr.detectChanges();
+  }
+
+
+  // BERECHNUNG DER PORTIONEN
+
+  currentServings = this.recipe.servings;
+
+  increaseServings() { 
+    this.currentServings++; 
+  }
+
+  decreaseServings() {
+    if (this.currentServings > 1) { this.currentServings--; }
+  }
+
+  getIngredientAmount(amount: string): string {
+
+    const numberMatch = amount.match(/[\d.]+/); //Zahl finden
+
+    if (!numberMatch) return amount;
+
+    const originalNumber = parseFloat(numberMatch[0]);
+
+    const scaledNumber = (originalNumber / this.recipe.servings) * this.currentServings; //neue Menge
+    return amount.replace(numberMatch[0], scaledNumber.toString()); //ersetzen
   }
 }
