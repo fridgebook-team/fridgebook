@@ -118,6 +118,8 @@ export class RecipeDetailComponent implements OnInit {
   matchPercentage = 0;
   missingIngredients: string[] = [];
   showAddMessage = false;
+  recipeCookedMessage = false;
+  recipeIsCooked = false;
 
   calculateMatch() {
 
@@ -176,5 +178,44 @@ export class RecipeDetailComponent implements OnInit {
 
     const scaledNumber = (originalNumber / this.recipe.servings) * this.currentServings; //neue Menge
     return amount.replace(numberMatch[0], scaledNumber.toString()); //ersetzen
+  }
+
+
+  // REZEPT GEKOCH BUTTON - ENTFERNT VERWENDETE ZUTATEN
+
+  async recipeCooked() {
+
+    for (const ingredient of this.recipe.ingredients) {
+
+      const amount = parseInt(ingredient.amount); // Zahl holen aus 250g
+      if (isNaN(amount)) continue;
+
+      const fridgeItem = this.fridgeService.items.find(item => {
+
+        const fridgeName = item.name.toLowerCase();
+        const ingredientName = ingredient.name.toLowerCase();
+
+        return (fridgeName.includes(ingredientName) || ingredientName.includes(fridgeName));
+      });
+
+      if (!fridgeItem) continue;
+
+      fridgeItem.quantity -= amount;
+
+      if (fridgeItem.quantity <= 0) {
+        await this.fridgeService.removeItem(fridgeItem);
+
+      } else {
+        await this.fridgeService.updateItem(fridgeItem);
+      }
+    }
+
+    this.recipeCookedMessage = true;
+    this.recipeIsCooked = true;
+
+    this.calculateMatch();
+    this.cdr.detectChanges();
+
+    await this.fridgeService.loadItems();
   }
 }

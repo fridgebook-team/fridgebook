@@ -231,6 +231,29 @@ h1 {
   font-size: 1.25rem;
 }
 
+.btn-cooked {
+  width: 100%;
+  margin-top: 2rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+
+  font-size: 1.1rem;
+  font-weight: bold;
+
+  background-color: var(--color-green);
+  color: white;
+}
+
+.btn-cooked:hover {
+  opacity: 0.9;
+}
+
+.btn-cooked:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
 @media (max-width: 768px) {
   .recipe-page {
     padding-inline: 0.85rem;
