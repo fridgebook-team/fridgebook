@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
+import { Component, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 
 
 @Component({
@@ -9,7 +9,10 @@ import { Component, ViewChild, ElementRef } from '@angular/core';
 })
 export class Searchbar {
   @ViewChild('searchinput') searchinput!: ElementRef<HTMLInputElement>;
+  @Output() searchChange = new EventEmitter<string>();
   isFocused = false;
+  searchTerm = '';
+
   recent(orna : string) {
     console.log(orna + ' was clicked');
   }

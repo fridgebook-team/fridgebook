@@ -1,4 +1,31 @@
-<div class="temptopbar"></div>
-<div class="exppage"><app-searchbar />
-<app-popular-recipes />
+<div class="space-above"></div>
+<div class="exppage"><app-searchbar (searchChange)="searchTerm = $event" />
+<app-popular-recipes *ngIf="!searchTerm" />
+<div *ngIf="searchTerm" class="search-results">
+    <a *ngFor="let recipe of filteredRecipes" class="recipe-card d-flex mb-3 shadow-sm" [routerLink]="['/recipes', recipe.id]">
+        <div class="image-wrapper">
+            <img [src]="recipe.image" alt="Recipe Image" [style.border-color]="recipe.borderColor">
+        </div>
+        <div class="content-wrapper flex-grow-1 p-2">
+            <div class="d-flex justify-content-between align-items-start">
+                <h5 class="fw-bold mb-1">{{ recipe.name }}</h5>
+            </div>
+            <div class="details d-flex align-items-center justify-content-between mb-1">
+                <span class="badge-time"><i class="bi bi-clock"></i> {{ recipe.time }}</span>
+            </div>
+            <div class="match-section d-flex align-items-end gap-3 mt-auto">
+                <div class="flex-grow-1">
+                    <span class="match-text d-block mb-1" [style.color]="recipe.borderColor" style="font-size: 0.8rem; font-weight: bold;">
+                        {{ recipe.matchPercentage }}%
+                    </span>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar" [style.width.%]="recipe.matchPercentage" [style.background-color]="recipe.borderColor"></div>
+                    </div>
+                </div>
+                <button class="btn btn-dark" [routerLink]="['/recipes', recipe.id]">Jetzt Kochen</button>
+            </div>
+        </div>
+    </a>
+    <p *ngIf="filteredRecipes.length === 0" class="no-results">Keine Rezepte gefunden.</p>
+</div>
 </div>
