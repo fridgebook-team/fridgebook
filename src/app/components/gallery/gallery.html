@@ -1,7 +1,20 @@
-<div class="galleryview">
-    <div class="gallerystripe">
-        <div *ngFor="let card of cards" class="galleryelement">
-            {{ card }}
+<h2 *ngIf="title" class="gallery-title">{{ title }}</h2>
+<div class="gallery-scroll-wrapper">
+    <div class="galleryview">
+        <div class="gallerystripe">
+            <a *ngFor="let recipe of recipes" class="galleryelement" [routerLink]="['/recipes', recipe.id]">
+                <img class="gallery-card-image" [src]="recipe.image" [alt]="recipe.name">
+                <div class="gallery-card-info">
+                    <span class="gallery-card-name">{{ recipe.name }}</span>
+                    <span class="gallery-card-time"><i class="bi bi-clock"></i> {{ recipe.time }}</span>
+                    <div class="gallery-card-progress">
+                        <div class="gallery-card-progress-bar"
+                            [style.width.%]="recipe.matchPercentage"
+                            [style.background-color]="recipe.borderColor">
+                        </div>
+                    </div>
+                </div>
+            </a>
         </div>
     </div>
 </div>

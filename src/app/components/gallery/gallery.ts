@@ -1,13 +1,27 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { RouterLink } from '@angular/router';
+
+export interface Recipe {
+  id: number;
+  name: string;
+  image: string;
+  time: string;
+  isVegan: boolean;
+  isVeggie: boolean;
+  isFavorite: boolean;
+  matchPercentage: number;
+  borderColor: string;
+}
 
 @Component({
   selector: 'app-gallery',
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   standalone: true,
   templateUrl: './gallery.html',
   styleUrls: ['./gallery.css']
 })
 export class Gallery {
-  cards = [1, 2, 3, 4, 5, 6, 7, 8];
+  @Input() recipes: Recipe[] = [];
+  @Input() title: string = '';
 }
