@@ -32,9 +32,8 @@ export class Favorites implements OnInit {
       time: '15 Min',
       isVegan: true,
       isVeggie: true,
-      isFavorite: true,
-      matchPercentage: 75,
-      borderColor: '#4A5D23',
+      matchPercentage: 0,
+      borderColor: '',
       ingredients: [
         'Ravioli',
         'Olivenoel',
@@ -52,9 +51,8 @@ export class Favorites implements OnInit {
       time: '30 Min',
       isVegan: false,
       isVeggie: false,
-      isFavorite: true,
-      matchPercentage: 15,
-      borderColor: '#a12424',
+      matchPercentage: 0,
+      borderColor: '',
       ingredients: [
         'Ravioli',
         'Olivenoel',
@@ -72,9 +70,8 @@ export class Favorites implements OnInit {
       time: '60 Min',
       isVegan: false,
       isVeggie: true,
-      isFavorite: true,
-      matchPercentage: 50,
-      borderColor: '#b38728',
+      matchPercentage: 0,
+      borderColor: '',
       ingredients: [
         'Ravioli',
         'Olivenoel',
@@ -92,9 +89,8 @@ export class Favorites implements OnInit {
       time: '90 Min',
       isVegan: true,
       isVeggie: true,
-      isFavorite: true,
-      matchPercentage: 90,
-      borderColor: '#4A5D23',
+      matchPercentage: 0,
+      borderColor: '',
       ingredients: [
         'Ravioli',
         'Olivenoel',
@@ -112,9 +108,8 @@ export class Favorites implements OnInit {
       time: '30 Min',
       isVegan: false,
       isVeggie: false,
-      isFavorite: true,
-      matchPercentage: 75,
-      borderColor: '#4A5D23',
+      matchPercentage: 0,
+      borderColor: '',
       ingredients: [
         'Ravioli',
         'Olivenoel',
@@ -132,9 +127,8 @@ export class Favorites implements OnInit {
       time: '30 Min',
       isVegan: true,
       isVeggie: true,
-      isFavorite: true,
-      matchPercentage: 75,
-      borderColor: '#4A5D23',
+      matchPercentage: 0,
+      borderColor: '',
       ingredients: [
         'Ravioli',
         'Olivenoel',
@@ -152,9 +146,8 @@ export class Favorites implements OnInit {
       time: '30 Min',
       isVegan: false,
       isVeggie: true,
-      isFavorite: true,
-      matchPercentage: 75,
-      borderColor: '#4A5D23',
+      matchPercentage: 0,
+      borderColor: '',
       ingredients: [
         'Ravioli',
         'Olivenoel',
@@ -170,6 +163,11 @@ export class Favorites implements OnInit {
   async ngOnInit() {
     await this.favoritesService.loadFavorites();
     await this.fridgeService.loadItems();
+    const savedTime = localStorage.getItem('favoritesTimeFilter');
+
+    if (savedTime) {
+      this.selectedTime = savedTime;
+    }
 
     this.veganFilterOn = document.documentElement.classList.contains('vegan') || false;
     this.veggieFilterOn = document.documentElement.classList.contains('veggie') || false;
@@ -183,6 +181,7 @@ export class Favorites implements OnInit {
 
   setTimeFilter(time: string) {
     this.selectedTime = time;
+    localStorage.setItem('favoritesTimeFilter', time);
     this.applyFilters();
   }
 
@@ -220,7 +219,7 @@ export class Favorites implements OnInit {
   applyFilters() {
     this.recipes.forEach(recipe => {
       recipe.matchPercentage = this.calculateMatch(recipe);
-      
+
       if (recipe.matchPercentage >= 70) {
         recipe.borderColor = '#4A5D23';
       }
@@ -282,7 +281,6 @@ interface Recipe {
   time: string;
   isVegan: boolean;
   isVeggie: boolean;
-  isFavorite: boolean;
   matchPercentage: number;
   borderColor: string;
   ingredients: string[];
