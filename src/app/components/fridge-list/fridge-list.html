@@ -50,20 +50,66 @@
           <button (click)="increaseQuantity(item)" class="btn-round">+</button>
         </div>
       </div>
-
       }
     </div>
   </section>
 
   <section class="mt-2 fixed-buttons">
-
-    <!-- Scan Buttons - not implemented yet -->
-    <div class="mt-2 d-flex flex-column gap-2 align-items-start">
-      <button class="btn-beige scan-btn">SCAN BARCODE</button>
-    </div>
-    <div class="mt-2 d-flex justify-content-between gap-2 ">
+    <div class="mt-2 d-flex justify-content-between gap-2" style="pointer-events: auto">
       <button class="btn-beige scan-btn">SCAN BARCODE</button>
       <button class="btn-beige scan-btn">FOTO-KI</button>
+      <button class="btn-beige" (click)="openAddModal()">+</button>
     </div>
   </section>
 </div>
+
+<!-- Manuell hinzufügen Modal -->
+@if (showAddModal) {
+<div class="modal-backdrop" (click)="closeAddModal()"></div>
+<div class="add-modal">
+  <h5 class="modal-title mb-3">Lebensmittel hinzufügen</h5>
+
+  <div class="mb-3">
+    <input
+      type="text"
+      class="form-control custom-input"
+      placeholder="Name (z.B. Tomaten)"
+      [(ngModel)]="newItem.name"
+    />
+  </div>
+
+  <div class="mb-3 d-flex gap-2">
+    <input
+      type="number"
+      class="form-control custom-input"
+      placeholder="Menge"
+      [(ngModel)]="newItem.quantity"
+      min="0"
+      style="flex: 1"
+    />
+    <select class="form-select custom-input" [(ngModel)]="newItem.unit" style="flex: 1">
+      <option value="Stk">Stk</option>
+      <option value="g">g</option>
+      <option value="kg">kg</option>
+      <option value="ml">ml</option>
+      <option value="L">L</option>
+      <option value="EL">EL</option>
+      <option value="TL">TL</option>
+    </select>
+  </div>
+
+  <div class="mb-4">
+    <label class="form-label small text-muted">Ablaufdatum (optional)</label>
+    <input
+      type="date"
+      class="form-control custom-input"
+      [(ngModel)]="newItem.expiry"
+    />
+  </div>
+
+  <div class="d-flex gap-2 justify-content-end mb-10">
+    <button class="btn-beige" (click)="closeAddModal()">Abbrechen</button>
+    <button class="btn-olive" (click)="submitNewItem()" [disabled]="!newItem.name || !newItem.quantity">Hinzufügen</button>
+  </div>
+</div>
+}
