@@ -2,13 +2,9 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 
-export interface Product {
-  name: string;
-  preis: number;
-  quantity: number;
-  unit: string;
-  expiry?: string;
-}
+import { Product } from '../models/scan.models';
+
+export type { Product };
 
 @Injectable({
   providedIn: 'root',

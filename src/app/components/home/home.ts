@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { BrandStamp } from '../brand-stamp/brand-stamp';
-import { Gallery, Recipe } from '../gallery/gallery';
+import { Gallery } from '../gallery/gallery';
+import { Recipe } from '../../models/recipe.models';
 
 @Component({
   selector: 'app-home',

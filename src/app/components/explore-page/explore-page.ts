@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { Searchbar } from '../searchbar/searchbar';
 import { PopularRecipes } from "../popular-recipes/popular-recipes";
-import { Recipe } from '../gallery/gallery';
+import { Recipe } from '../../models/recipe.models';
 
 @Component({
   selector: 'app-explore-page',

@@ -1,18 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { Recipe } from '../../models/recipe.models';
 
-export interface Recipe {
-  id: number;
-  name: string;
-  image: string;
-  time: string;
-  isVegan: boolean;
-  isVeggie: boolean;
-  isFavorite: boolean;
-  matchPercentage: number;
-  borderColor: string;
-}
+export type { Recipe };
 
 @Component({
   selector: 'app-gallery',
