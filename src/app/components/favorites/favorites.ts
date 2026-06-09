@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { Icon } from '../icon/icon';
 import { RouterLink } from '@angular/router';
 import { FavoritesService } from '../../services/favorites';
+import { FridgeService } from '../../services/fridge';
 
 @Component({
   selector: 'app-favorites',
@@ -17,6 +18,7 @@ export class Favorites implements OnInit {
 
   constructor(
     public favoritesService: FavoritesService,
+    private fridgeService: FridgeService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -30,9 +32,17 @@ export class Favorites implements OnInit {
       time: '15 Min',
       isVegan: true,
       isVeggie: true,
-      isFavorite: true,
-      matchPercentage: 75,
-      borderColor: '#4A5D23'
+      matchPercentage: 0,
+      borderColor: '',
+      ingredients: [
+        'Ravioli',
+        'Olivenoel',
+        'Knoblauch',
+        'Kirschtomaten',
+        'Spinat',
+        'Sahne',
+        'Parmesan'
+      ]
     },
     {
       id: 1,
@@ -41,9 +51,17 @@ export class Favorites implements OnInit {
       time: '30 Min',
       isVegan: false,
       isVeggie: false,
-      isFavorite: true,
-      matchPercentage: 15,
-      borderColor: '#a12424'
+      matchPercentage: 0,
+      borderColor: '',
+      ingredients: [
+        'Ravioli',
+        'Olivenoel',
+        'Knoblauch',
+        'Kirschtomaten',
+        'Spinat',
+        'Sahne',
+        'Parmesan'
+      ]
     },
     {
       id: 2,
@@ -52,9 +70,17 @@ export class Favorites implements OnInit {
       time: '60 Min',
       isVegan: false,
       isVeggie: true,
-      isFavorite: true,
-      matchPercentage: 50,
-      borderColor: '#b38728'
+      matchPercentage: 0,
+      borderColor: '',
+      ingredients: [
+        'Ravioli',
+        'Olivenoel',
+        'Knoblauch',
+        'Kirschtomaten',
+        'Spinat',
+        'Sahne',
+        'Parmesan'
+      ]
     },
     {
       id: 3,
@@ -63,9 +89,17 @@ export class Favorites implements OnInit {
       time: '90 Min',
       isVegan: true,
       isVeggie: true,
-      isFavorite: true,
-      matchPercentage: 90,
-      borderColor: '#4A5D23'
+      matchPercentage: 0,
+      borderColor: '',
+      ingredients: [
+        'Ravioli',
+        'Olivenoel',
+        'Knoblauch',
+        'Kirschtomaten',
+        'Spinat',
+        'Sahne',
+        'Parmesan'
+      ]
     },
     {
       id: 4,
@@ -74,9 +108,17 @@ export class Favorites implements OnInit {
       time: '30 Min',
       isVegan: false,
       isVeggie: false,
-      isFavorite: true,
-      matchPercentage: 75,
-      borderColor: '#4A5D23'
+      matchPercentage: 0,
+      borderColor: '',
+      ingredients: [
+        'Ravioli',
+        'Olivenoel',
+        'Knoblauch',
+        'Kirschtomaten',
+        'Spinat',
+        'Sahne',
+        'Parmesan'
+      ]
     },
     {
       id: 5,
@@ -85,9 +127,17 @@ export class Favorites implements OnInit {
       time: '30 Min',
       isVegan: true,
       isVeggie: true,
-      isFavorite: true,
-      matchPercentage: 75,
-      borderColor: '#4A5D23'
+      matchPercentage: 0,
+      borderColor: '',
+      ingredients: [
+        'Ravioli',
+        'Olivenoel',
+        'Knoblauch',
+        'Kirschtomaten',
+        'Spinat',
+        'Sahne',
+        'Parmesan'
+      ]
     },
     {
       id: 6,
@@ -96,14 +146,28 @@ export class Favorites implements OnInit {
       time: '30 Min',
       isVegan: false,
       isVeggie: true,
-      isFavorite: true,
-      matchPercentage: 75,
-      borderColor: '#4A5D23'
+      matchPercentage: 0,
+      borderColor: '',
+      ingredients: [
+        'Ravioli',
+        'Olivenoel',
+        'Knoblauch',
+        'Kirschtomaten',
+        'Spinat',
+        'Sahne',
+        'Parmesan'
+      ]
     }
   ];
 
   async ngOnInit() {
     await this.favoritesService.loadFavorites();
+    await this.fridgeService.loadItems();
+    const savedTime = localStorage.getItem('favoritesTimeFilter');
+
+    if (savedTime) {
+      this.selectedTime = savedTime;
+    }
 
     this.veganFilterOn = document.documentElement.classList.contains('vegan') || false;
     this.veggieFilterOn = document.documentElement.classList.contains('veggie') || false;
@@ -117,6 +181,7 @@ export class Favorites implements OnInit {
 
   setTimeFilter(time: string) {
     this.selectedTime = time;
+    localStorage.setItem('favoritesTimeFilter', time);
     this.applyFilters();
   }
 
@@ -152,6 +217,21 @@ export class Favorites implements OnInit {
   }
 
   applyFilters() {
+    this.recipes.forEach(recipe => {
+      recipe.matchPercentage = this.calculateMatch(recipe);
+
+      if (recipe.matchPercentage >= 70) {
+        recipe.borderColor = '#4A5D23';
+      }
+      else if (recipe.matchPercentage >= 40) {
+        recipe.borderColor = '#b38728';
+      }
+      else {
+        recipe.borderColor = '#a12424';
+      }
+
+    });
+
     const timeLimit = parseInt(this.selectedTime);
 
     const favIds = this.favoritesService.favoriteIds;
@@ -172,6 +252,26 @@ export class Favorites implements OnInit {
     });
   }
 
+  calculateMatch(recipe: Recipe): number {
+
+    const fridgeNames = this.fridgeService.items.map(item =>
+      item.name.toLowerCase().trim()
+    );
+
+    const matches = recipe.ingredients.filter(ingredient => {
+
+      const ing = ingredient.toLowerCase().trim();
+
+      return fridgeNames.some(fridge =>
+        fridge.includes(ing) ||
+        ing.includes(fridge)
+      );
+
+    }).length;
+
+    return Math.round(matches / recipe.ingredients.length * 100);
+  }
+
 }
 
 interface Recipe {
@@ -181,7 +281,7 @@ interface Recipe {
   time: string;
   isVegan: boolean;
   isVeggie: boolean;
-  isFavorite: boolean;
   matchPercentage: number;
   borderColor: string;
+  ingredients: string[];
 }
