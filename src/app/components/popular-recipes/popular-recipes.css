@@ -1,30 +1,18 @@
-#PR1 {
-  
-}
 .popular-recipe-container {
-  text-align: center;
-  align-items: center;
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  border: 2pt solid olive;
-  border-radius: 30pt;
-  padding-bottom: 10pt;
-  width: 83vw;
-}
-.pop-elem {
-  text-align: center;
-  width: 80vw;
-  margin-top: 5pt;
-  height: 32pt;
-  border: 2pt solid olive;
-  border-radius: 30pt;
+  width: 90vw;
+  margin-top: 16px;
 }
 
-.pop-elem:hover{
-  margin-top: 5pt;
-  height: 32pt;
-  border: 2pt solid rgb(120, 120, 5);
-  border-radius: 30pt;
-  background-color:  rgb(120, 120, 5);
+.pop-title {
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+}
+
+.pop-elem {
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 12px;
+  text-decoration: none;
+  color: inherit;
 }

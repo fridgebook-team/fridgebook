@@ -4,6 +4,7 @@
     class="searchinput"
     (focus)="isFocused = true"
     (blur)="isFocused = false"
+    (input)="searchTerm = searchinput.value; searchChange.emit(searchinput.value)"
   />
   @if (isFocused) {
     <div class="dropdown-container">
