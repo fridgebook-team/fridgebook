@@ -4,20 +4,9 @@
     <h1>Deine Einkaufsliste</h1>
   </header>
 
-  <!-- Status Meldung -->
   <div *ngIf="statusMessage" class="alert text-center mb-3">
     {{ statusMessage }}
   </div>
-
-  <!-- Unsichtbares Kamera-Input -->
-  <input
-    #cameraInput
-    type="file"
-    accept="image/*"
-    capture="environment"
-    style="display:none"
-    (change)="onPhotoTaken($event)"
-  />
 
   <section class="mb-4">
     <h6 class="text-uppercase text-muted ls-wide small mb-3">Lebensmittel</h6>
@@ -40,94 +29,12 @@
     </button>
 
     <div class="mt-2 d-flex flex-column gap-2 align-items-start">
-      <button class="btn-beige scan-btn" (click)="startBarcodeScanner()" [disabled]="isBarcodeLookupLoading">
-        {{ isBarcodeLookupLoading ? 'PRODUKT WIRD GELADEN...' : 'SCAN BARCODE' }}
+      <button class="btn-beige scan-btn" (click)="barcodeScanner.open()" [disabled]="barcodeScanner.isLookupLoading">
+        {{ barcodeScanner.isLookupLoading ? 'PRODUKT WIRD GELADEN...' : 'SCAN BARCODE' }}
       </button>
-      <button class="btn-beige scan-btn" (click)="openCamera()" [disabled]="isScanning">
-        {{ isScanning ? 'WIRD GESCANNT...' : 'SCAN RECHNUNG' }}
-      </button>
+      <app-receipt-scan-button (statusChange)="onStatusChange($event)" />
     </div>
   </section>
 
-  <section *ngIf="scannedProduct || barcodeErrorMessage" class="barcode-result-card mt-4">
-    <h2>Barcode-Ergebnis</h2>
-
-    <p *ngIf="barcodeErrorMessage" class="barcode-feedback error">{{ barcodeErrorMessage }}</p>
-
-    <div *ngIf="scannedProduct" class="product-preview">
-      <img
-        *ngIf="scannedProduct.imageUrl"
-        [src]="scannedProduct.imageUrl"
-        [alt]="scannedProduct.name"
-        class="product-image"
-      />
-
-      <div class="product-content">
-        <p class="barcode-chip">Barcode: {{ scannedProduct.barcode }}</p>
-        <h3>{{ scannedProduct.name }}</h3>
-        <p *ngIf="scannedProduct.brand" class="muted">{{ scannedProduct.brand }}</p>
-        <p *ngIf="scannedProduct.packageLabel" class="muted">
-          Verpackung laut Datenbank: {{ scannedProduct.packageLabel }}
-        </p>
-
-        <div class="quantity-editor">
-          <div class="quantity-stepper">
-            <button type="button" class="btn-round" (click)="decreaseDraftQuantity()">-</button>
-            <input type="number" min="0.1" step="0.1" [(ngModel)]="scannedProduct.quantity" class="quantity-input" />
-            <button type="button" class="btn-round" (click)="increaseDraftQuantity()">+</button>
-          </div>
-
-          <select [(ngModel)]="scannedProduct.unit" class="form-select unit-select">
-            <option *ngFor="let unit of unitOptions" [value]="unit">{{ unit }}</option>
-          </select>
-        </div>
-
-        <button class="btn-olive" (click)="addScannedProductToFridge()">
-          IN DEN KUEHLSCHRANK
-        </button>
-      </div>
-    </div>
-  </section>
-</div>
-
-<div *ngIf="isBarcodeScannerOpen" class="scanner-overlay">
-  <div class="scanner-dialog">
-    <div class="scanner-header">
-      <div>
-        <p class="scanner-eyebrow">Barcode Scan</p>
-        <h2>Artikel mit Kamera erfassen</h2>
-      </div>
-      <button type="button" class="btn-round" (click)="closeBarcodeScanner()">x</button>
-    </div>
-
-    <div class="scanner-viewport">
-      <video #barcodeVideo autoplay playsinline muted></video>
-      <div class="scanner-frame"></div>
-    </div>
-
-    <p class="barcode-feedback">{{ barcodeStatusMessage }}</p>
-
-    <div class="manual-barcode">
-      <label for="manualBarcode" class="manual-label">Barcode manuell eingeben</label>
-      <div class="manual-actions">
-        <input
-          id="manualBarcode"
-          type="text"
-          inputmode="numeric"
-          autocomplete="off"
-          placeholder="z.B. 9000000000000"
-          [(ngModel)]="manualBarcode"
-          class="form-control custom-input"
-        />
-        <button
-          type="button"
-          class="btn-olive"
-          (click)="lookupManualBarcode()"
-          [disabled]="isBarcodeLookupLoading"
-        >
-          Artikel laden
-        </button>
-      </div>
-    </div>
-  </div>
+  <app-barcode-scanner #barcodeScanner (productScanned)="onProductScanned($event)" />
 </div>

@@ -3,38 +3,9 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FridgeService } from '../../services/fridge';
 import { ShoppingListService } from '../../services/shopping-list';
+import { RecipeDetail, RecipeIngredient, RecipeStep, RecipeTip } from '../../models/recipe-detail.models';
 
-interface RecipeStep {
-  title: string;
-  description: string;
-}
-
-interface RecipeIngredient {
-  amount: string;
-  name: string;
-}
-
-interface RecipeTip {
-  icon: string;
-  text: string;
-}
-
-interface RecipeDetail {
-  id: number;
-  title: string;
-  subtitle: string;
-  image: string;
-  badge: string;
-  duration: string;
-  difficulty: string;
-  servings: number;
-  matchLabel: string;
-  description: string;
-  tags: string[];
-  ingredients: RecipeIngredient[];
-  steps: RecipeStep[];
-  tips: RecipeTip[];
-}
+export type { RecipeDetail, RecipeIngredient, RecipeStep, RecipeTip };
 
 @Component({
   selector: 'app-recipe-detail',

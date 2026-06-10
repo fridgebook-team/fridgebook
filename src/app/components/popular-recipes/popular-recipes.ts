@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
-import { Recipe } from '../gallery/gallery';
+import { Recipe } from '../../models/recipe.models';
 
 @Component({
   selector: 'app-popular-recipes',

@@ -1,14 +1,8 @@
 import { Injectable } from '@angular/core';
 import { DbService } from './db.service';
+import { FridgeItem } from '../models/fridge.models';
 
-export interface FridgeItem {
-  id?: number;
-  name: string;
-  quantity: number;
-  unit: string;
-  expiry?: string;
-  addedAt: string;
-}
+export type { FridgeItem };
 
 @Injectable({
   providedIn: 'root',
