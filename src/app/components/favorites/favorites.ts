@@ -4,6 +4,7 @@ import { Icon } from '../icon/icon';
 import { RouterLink } from '@angular/router';
 import { FavoritesService } from '../../services/favorites';
 import { FridgeService } from '../../services/fridge';
+import { Recipe } from '../../models/recipe.models';
 
 @Component({
   selector: 'app-favorites',
@@ -258,30 +259,15 @@ export class Favorites implements OnInit {
       item.name.toLowerCase().trim()
     );
 
-    const matches = recipe.ingredients.filter(ingredient => {
+    const ingredients = recipe.ingredients ?? [];
 
+    const matches = ingredients.filter(ingredient => {
       const ing = ingredient.toLowerCase().trim();
-
-      return fridgeNames.some(fridge =>
-        fridge.includes(ing) ||
-        ing.includes(fridge)
-      );
-
+      return fridgeNames.some(fridge => fridge.includes(ing) || ing.includes(fridge));
     }).length;
 
-    return Math.round(matches / recipe.ingredients.length * 100);
+    return ingredients.length === 0 ? 0 : Math.round(matches / ingredients.length * 100);
   }
 
 }
 
-interface Recipe {
-  id: number;
-  name: string;
-  image: string;
-  time: string;
-  isVegan: boolean;
-  isVeggie: boolean;
-  matchPercentage: number;
-  borderColor: string;
-  ingredients: string[];
-}

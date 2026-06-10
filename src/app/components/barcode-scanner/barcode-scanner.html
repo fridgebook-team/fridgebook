@@ -1,0 +1,77 @@
+<!-- Scanner Overlay -->
+<div *ngIf="isOpen" class="scanner-overlay">
+  <div class="scanner-dialog">
+    <div class="scanner-header">
+      <div>
+        <p class="scanner-eyebrow">Barcode Scan</p>
+        <h2>Artikel mit Kamera erfassen</h2>
+      </div>
+      <button type="button" class="btn-round" (click)="close()">x</button>
+    </div>
+
+    <div class="scanner-viewport">
+      <video #barcodeVideo autoplay playsinline muted></video>
+      <div class="scanner-frame"></div>
+    </div>
+
+    <p class="barcode-feedback">{{ statusMessage }}</p>
+
+    <div class="manual-barcode">
+      <label for="manualBarcode" class="manual-label">Barcode manuell eingeben</label>
+      <div class="manual-actions">
+        <input
+          id="manualBarcode"
+          type="text"
+          inputmode="numeric"
+          autocomplete="off"
+          placeholder="z.B. 9000000000000"
+          [(ngModel)]="manualBarcode"
+          class="form-control custom-input"
+        />
+        <button type="button" class="btn-olive" (click)="lookupManual()" [disabled]="isLookupLoading">
+          Artikel laden
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Produkt-Vorschau -->
+<section *ngIf="scannedProduct || errorMessage" class="barcode-result-card mt-4">
+  <h2>Barcode-Ergebnis</h2>
+
+  <p *ngIf="errorMessage" class="barcode-feedback error">{{ errorMessage }}</p>
+
+  <div *ngIf="scannedProduct" class="product-preview">
+    <img
+      *ngIf="scannedProduct.imageUrl"
+      [src]="scannedProduct.imageUrl"
+      [alt]="scannedProduct.name"
+      class="product-image"
+    />
+
+    <div class="product-content">
+      <p class="barcode-chip">Barcode: {{ scannedProduct.barcode }}</p>
+      <h3>{{ scannedProduct.name }}</h3>
+      <p *ngIf="scannedProduct.brand" class="muted">{{ scannedProduct.brand }}</p>
+      <p *ngIf="scannedProduct.packageLabel" class="muted">
+        Verpackung laut Datenbank: {{ scannedProduct.packageLabel }}
+      </p>
+
+      <div class="quantity-editor">
+        <div class="quantity-stepper">
+          <button type="button" class="btn-round" (click)="decreaseQuantity()">-</button>
+          <input type="number" min="0.1" step="0.1" [(ngModel)]="scannedProduct.quantity" class="quantity-input" />
+          <button type="button" class="btn-round" (click)="increaseQuantity()">+</button>
+        </div>
+        <select [(ngModel)]="scannedProduct.unit" class="form-select unit-select">
+          <option *ngFor="let unit of unitOptions" [value]="unit">{{ unit }}</option>
+        </select>
+      </div>
+
+      <button class="btn-olive" (click)="confirmProduct()">
+        IN DEN KUEHLSCHRANK
+      </button>
+    </div>
+  </div>
+</section>

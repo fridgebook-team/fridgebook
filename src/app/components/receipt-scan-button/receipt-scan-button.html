@@ -1,0 +1,11 @@
+<input
+  #cameraInput
+  type="file"
+  accept="image/*"
+  capture="environment"
+  style="display:none"
+  (change)="onPhotoTaken($event)"
+/>
+<button class="btn-beige scan-btn" (click)="openCamera()" [disabled]="isScanning">
+  {{ isScanning ? 'WIRD GESCANNT...' : 'SCAN RECHNUNG' }}
+</button>

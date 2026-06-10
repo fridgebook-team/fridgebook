@@ -5,7 +5,8 @@ export interface Recipe {
   time: string;
   isVegan: boolean;
   isVeggie: boolean;
-  isFavorite: boolean;
+  isFavorite?: boolean;
   matchPercentage: number;
   borderColor: string;
+  ingredients?: string[];
 }
