@@ -15,39 +15,31 @@ export class ShoppingListService {
 
   async loadItems() {
     this.items = await this.db.getAll("einkaufsliste");
-    console.log("shopping service: items after load:", this.items);
   }
 
-  //Hinzufügen
-  async addItem(name: string) {
-    console.log("service shopping-list: addItem:", name);
+  async addItem(name: string, quantity = 1, unit = 'Stk') {
     const normalized = name.trim().toLowerCase();
-    
-    const existing = this.items.find(
-      i => i.name.toLowerCase() === normalized
-    );
 
-    if (existing) {
-      console.log("duplicate blocked"); //irgendwie für user zeigen
-      return 'duplicate'; //keine Duplikate - ‘duplicate‘ für component
-    }
+    const existing = this.items.find(i => i.name.toLowerCase() === normalized);
+    if (existing) return 'duplicate';
 
-    await this.db.add("einkaufsliste", { name });
-    await this.loadItems(); //lödt db neu mit neuem Item
-
+    await this.db.add("einkaufsliste", { name: name.trim(), quantity, unit });
+    await this.loadItems();
     return 'ok';
   }
 
-  //Entfernen
+  async updateItem(item: ShoppingItem) {
+    await this.db.update("einkaufsliste", item);
+    await this.loadItems();
+  }
+
   async removeItem(item: ShoppingItem) {
     await this.db.delete("einkaufsliste", item.id!);
-    await this.loadItems(); //lödt db neu ohne entferntes Item
+    await this.loadItems();
   }
 
   removeByName(name: string) {
-    const normalizedName = name.trim().toLowerCase();
-    this.items = this.items.filter(
-      item => item.name.trim().toLowerCase() !== normalizedName
-    );
+    const normalized = name.trim().toLowerCase();
+    this.items = this.items.filter(i => i.name.trim().toLowerCase() !== normalized);
   }
 }

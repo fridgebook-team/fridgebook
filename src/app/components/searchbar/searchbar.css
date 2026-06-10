@@ -9,18 +9,19 @@
 .searchinput {
   width: 80vw;
   height: 32pt;
-  border-radius: 50px;
+  border-radius: var(--radius-pill);
   border: 2px solid var(--color-dark-text);
   background-color: var(--color-bg-beige);
   color: var(--color-dark-text);
   font-family: var(--font-body);
-  transition: width 0.3s ease;
   padding: 0 16px;
+  transition: width 0.3s ease;
 }
 
 .searchbar-container.focused .searchinput {
   width: 95vw;
 }
+
 .dropdown-container {
   width: 80vw;
   border: 1px solid var(--color-dark-beige);
@@ -30,34 +31,9 @@
   background-color: var(--color-bg-secondary-beige);
   margin-top: 42px;
   overflow: hidden;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow-soft);
 }
-.recipe-container {
-  margin-top: 48pt;
-  width: 90vw;
-  border: 2px solid black;
-  border-radius: 30px;
-}
-.pop-recipe-title {
-  height: 48px;
-  padding-left: 15%;
-  margin-top: 4px;
-  border-bottom: 1px solid black;
-  font-size: larger;
-}
-.pop-recipe {
-  width: 60vw;
-  height: 32px;
-  padding-left: 15%;
-  margin-top: 8px;
-  border-bottom: 1px solid black;
-}
-.pop-recipe-last {
-  width: 60vw;
-  height: 32px;
-  padding-left: 15%;
-  margin-top: 8px;
-}
+
 .dropdown-title {
   padding: 8px 16px;
   font-size: 0.75rem;
@@ -72,6 +48,7 @@
   font-size: 0.9rem;
   color: var(--color-dark-text);
   cursor: pointer;
+  transition: background 0.15s ease;
 }
 
 .dropdown-item:hover {

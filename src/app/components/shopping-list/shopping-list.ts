@@ -1,5 +1,6 @@
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { FridgeService } from '../../services/fridge';
 import { ShoppingListService, ShoppingItem } from '../../services/shopping-list';
 import { BarcodeScannerComponent } from '../barcode-scanner/barcode-scanner';
@@ -10,12 +11,17 @@ import Fuse from 'fuse.js';
 @Component({
   selector: 'app-shopping-list',
   standalone: true,
-  imports: [CommonModule, BarcodeScannerComponent, ReceiptScanButtonComponent],
+  imports: [CommonModule, FormsModule, BarcodeScannerComponent, ReceiptScanButtonComponent],
   templateUrl: './shopping-list.html',
   styleUrl: './shopping-list.css',
 })
 export class ShoppingList implements OnInit {
+  @ViewChild('barcodeScanner') barcodeScannerRef!: BarcodeScannerComponent;
+
   statusMessage = '';
+  showAddSheet = false;
+  newItem = { name: '', quantity: 1, unit: 'Stk' };
+  readonly unitOptions = ['Stk', 'g', 'kg', 'ml', 'L', 'EL', 'TL'];
 
   constructor(
     private fridgeService: FridgeService,
@@ -28,22 +34,47 @@ export class ShoppingList implements OnInit {
     this.cdr.detectChanges();
   }
 
-  get items() {
-    return this.shoppingListService.items;
+  get items() { return this.shoppingListService.items; }
+
+  openAddSheet() {
+    this.newItem = { name: '', quantity: 1, unit: 'Stk' };
+    this.showAddSheet = true;
   }
 
-  async addItem(inputElement: HTMLInputElement) {
-    const result = await this.shoppingListService.addItem(inputElement.value);
+  closeAddSheet() { this.showAddSheet = false; }
 
+  openBarcode() {
+    this.closeAddSheet();
+    this.barcodeScannerRef.open();
+  }
+
+  async submitNewItem() {
+    if (!this.newItem.name.trim()) return;
+    const result = await this.shoppingListService.addItem(
+      this.newItem.name, this.newItem.quantity, this.newItem.unit
+    );
     if (result === 'duplicate') {
       this.statusMessage = 'Bereits vorhanden';
-      this.cdr.detectChanges();
       setTimeout(() => { this.statusMessage = ''; this.cdr.detectChanges(); }, 2000);
-      return;
+    } else {
+      this.showAddSheet = false;
     }
+    this.cdr.detectChanges();
+  }
 
-    inputElement.value = '';
-    this.statusMessage = '';
+  async increaseQuantity(item: ShoppingItem) {
+    const step = (item.unit === 'g' || item.unit === 'ml') ? 10 : 1;
+    await this.shoppingListService.updateItem({ ...item, quantity: item.quantity + step });
+    this.cdr.detectChanges();
+  }
+
+  async decreaseQuantity(item: ShoppingItem) {
+    const step = (item.unit === 'g' || item.unit === 'ml') ? 10 : 1;
+    if (item.quantity > step) {
+      await this.shoppingListService.updateItem({ ...item, quantity: item.quantity - step });
+    } else {
+      await this.shoppingListService.removeItem(item);
+    }
     this.cdr.detectChanges();
   }
 
@@ -53,19 +84,13 @@ export class ShoppingList implements OnInit {
   }
 
   onProductScanned(draft: BarcodeDraft) {
-    this.fridgeService.addItem({
-      name: draft.name,
-      quantity: draft.quantity,
-      unit: draft.unit,
-    });
-
+    this.fridgeService.addItem({ name: draft.name, quantity: draft.quantity, unit: draft.unit });
     const fuse = new Fuse(this.items, { keys: ['name'], threshold: 0.35, includeScore: true });
     const results = fuse.search(draft.name);
     if (results.length > 0 && (results[0].score ?? 1) < 0.35) {
       this.shoppingListService.removeItem(results[0].item);
     }
-
-    this.statusMessage = `${draft.name} wurde dem Kuehlschrank hinzugefuegt.`;
+    this.statusMessage = `${draft.name} wurde dem Kühlschrank hinzugefügt.`;
     this.cdr.detectChanges();
     setTimeout(() => { this.statusMessage = ''; this.cdr.detectChanges(); }, 3000);
   }

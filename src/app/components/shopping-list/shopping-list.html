@@ -1,40 +1,67 @@
 <div class="space-above"></div>
-<div class="container py-4">
-  <header class="text-center mb-5">
+<div class="container py-4 shopping-page">
+
+  <header class="text-center mb-4">
     <h1>Deine Einkaufsliste</h1>
   </header>
 
-  <div *ngIf="statusMessage" class="alert text-center mb-3">
-    {{ statusMessage }}
-  </div>
+  <div *ngIf="statusMessage" class="status-toast">{{ statusMessage }}</div>
 
-  <section class="mb-4">
-    <h6 class="text-uppercase text-muted ls-wide small mb-3">Lebensmittel</h6>
-    <div class="list-group">
-      @for (item of items; track item.name) {
-        <div class="list-group-item d-flex justify-content-between align-items-center">
+  <section>
+    <p class="section-label">{{ items.length }} Artikel</p>
+    <div class="shopping-list">
+      @for (item of items; track item.id) {
+        <div class="shopping-item">
+          <div class="item-check-circle" (click)="removeItem(item)"></div>
           <span class="item-text">{{ item.name }}</span>
-          <button (click)="removeItem(item)" class="btn-round">—</button>
+          <div class="quantity-controls">
+            <button (click)="decreaseQuantity(item)" class="btn-round">-</button>
+            <span class="item-quantity">{{ item.quantity }} {{ item.unit }}</span>
+            <button (click)="increaseQuantity(item)" class="btn-round">+</button>
+          </div>
         </div>
       }
-    </div>
-  </section>
-
-  <section class="mt-2">
-    <div class="mb-3">
-      <input #newItemInput type="text" class="form-control custom-input" placeholder="Zwiebeln, Milch...">
-    </div>
-    <button (click)="addItem(newItemInput)" class="btn-olive">
-      HINZUFÜGEN <span class="ms-2">+</span>
-    </button>
-
-    <div class="mt-2 d-flex flex-column gap-2 align-items-start">
-      <button class="btn-beige scan-btn" (click)="barcodeScanner.open()" [disabled]="barcodeScanner.isLookupLoading">
-        {{ barcodeScanner.isLookupLoading ? 'PRODUKT WIRD GELADEN...' : 'SCAN BARCODE' }}
-      </button>
-      <app-receipt-scan-button (statusChange)="onStatusChange($event)" />
+      @if (items.length === 0) {
+        <p class="empty-hint">Noch nichts hier. Tippe auf + um etwas hinzuzufügen!</p>
+      }
     </div>
   </section>
 
   <app-barcode-scanner #barcodeScanner (productScanned)="onProductScanned($event)" />
 </div>
+
+<!-- Floating + Button -->
+<button class="fab" (click)="openAddSheet()">+</button>
+
+<!-- Bottom Sheet -->
+@if (showAddSheet) {
+  <div class="modal-backdrop" (click)="closeAddSheet()"></div>
+  <div class="add-sheet">
+    <h5 class="sheet-title">Zur Liste hinzufügen</h5>
+
+    <div class="mb-3">
+      <input type="text" class="form-control custom-input" placeholder="z.B. Tomaten"
+        [(ngModel)]="newItem.name" (keyup.enter)="submitNewItem()">
+    </div>
+
+    <div class="mb-4 d-flex gap-2">
+      <input type="number" class="form-control custom-input" placeholder="Menge"
+        [(ngModel)]="newItem.quantity" min="1" style="flex:1">
+      <select class="form-select custom-input" [(ngModel)]="newItem.unit" style="flex:1">
+        <option *ngFor="let u of unitOptions" [value]="u">{{ u }}</option>
+      </select>
+    </div>
+
+    <div class="d-flex gap-2 justify-content-end mb-3">
+      <button class="btn-beige" (click)="closeAddSheet()">Abbrechen</button>
+      <button class="btn-olive" (click)="submitNewItem()" [disabled]="!newItem.name">Hinzufügen</button>
+    </div>
+
+    <div class="scan-row">
+      <button class="btn-beige scan-btn" (click)="openBarcode()" [disabled]="barcodeScannerRef.isLookupLoading">
+        <i class="bi bi-upc-scan me-1"></i> Barcode
+      </button>
+      <app-receipt-scan-button (statusChange)="onStatusChange($event)" />
+    </div>
+  </div>
+}

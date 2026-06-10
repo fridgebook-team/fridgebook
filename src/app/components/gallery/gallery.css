@@ -1,98 +1,127 @@
 .gallery-title {
-    font-size: 1.1rem;
-    padding: 0 16px;
-    margin-bottom: 6px;
+  font-size: 1.2rem;
+  padding: 0 20px;
+  margin-bottom: 10px;
 }
 
+/* fade links + rechts */
 .gallery-scroll-wrapper {
-    position: relative;
+  position: relative;
+}
+
+.gallery-scroll-wrapper::before,
+.gallery-scroll-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 56px;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.gallery-scroll-wrapper::before {
+  left: 0;
+  background: linear-gradient(to left, transparent, var(--color-bg-beige));
 }
 
 .gallery-scroll-wrapper::after {
-    content: '';
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 48px;
-    height: 100%;
-    background: linear-gradient(to right, transparent, var(--color-bg-beige));
-    pointer-events: none;
+  right: 0;
+  background: linear-gradient(to right, transparent, var(--color-bg-beige));
 }
 
 .galleryview {
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    padding: 8px 0 12px;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 10px 0 16px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 }
 
 .galleryview::-webkit-scrollbar {
-    display: none;
+  display: none;
 }
 
 .gallerystripe {
-    display: flex;
-    flex-direction: row;
-    gap: 12px;
-    width: fit-content;
-    padding: 0 16px;
+  display: flex;
+  flex-direction: row;
+  gap: 14px;
+  width: fit-content;
+  padding: 4px 20px;
 }
 
+/* card */
 .galleryelement {
-    flex: 0 0 160px;
-    height: 240px;
-    background: white;
-    border-radius: 16px;
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    text-decoration: none;
-    scroll-snap-align: start;
+  flex: 0 0 165px;
+  height: 250px;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  scroll-snap-align: start;
+  box-shadow: 0 4px 16px rgba(62, 44, 31, 0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.galleryelement:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(62, 44, 31, 0.15);
 }
 
 .gallery-card-image {
-    width: 100%;
-    height: 140px;
-    object-fit: cover;
+  width: 100%;
+  height: 145px;
+  object-fit: cover;
 }
 
 .gallery-card-info {
-    background-color: var(--color-bg-secondary-beige);
-    padding: 8px;
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
+  background-color: var(--color-bg-secondary-beige);
+  padding: 10px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
 }
 
 .gallery-card-name {
-    font-family: var(--font-body);
-    font-weight: 600;
-    font-size: 0.75rem;
-    color: var(--color-dark-text);
-    line-height: 1.2;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.78rem;
+  color: var(--color-dark-text);
+  line-height: 1.2;
 }
 
+/* time badge — kein Bootstrap-Blau */
 .gallery-card-time {
-    background-color: var(--color-dark-beige);
-    padding: 2px 8px;
-    border-radius: 10px;
-    font-size: 0.7rem;
-    width: fit-content;
+  background-color: var(--color-dark-beige);
+  color: var(--color-dark-text);
+  padding: 3px 9px;
+  border-radius: 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  width: fit-content;
 }
 
+.gallery-card-time i {
+  color: var(--color-dark-text);
+}
+
+/* match progress bar */
 .gallery-card-progress {
-    background-color: var(--color-dark-beige);
-    border-radius: 10px;
-    height: 6px;
-    width: 100%;
-    overflow: hidden;
+  background-color: rgba(62, 44, 31, 0.12);
+  border-radius: 10px;
+  height: 5px;
+  width: 100%;
+  overflow: hidden;
+  margin-top: auto;
 }
 
 .gallery-card-progress-bar {
-    height: 100%;
-    border-radius: 10px;
+  height: 100%;
+  border-radius: 10px;
+  transition: width 0.4s ease;
 }
