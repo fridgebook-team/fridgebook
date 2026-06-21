@@ -1,0 +1,24 @@
+.exppage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 100px;
+  width: 100%;
+}
+
+.search-results {
+  width: 90%;
+  margin-top: 16px;
+}
+
+.search-results a.recipe-card {
+  text-decoration: none;
+  color: inherit;
+}
+
+.no-results {
+  text-align: center;
+  color: var(--color-oliv);
+  margin-top: 24px;
+}
+

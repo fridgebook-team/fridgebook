@@ -1,0 +1,79 @@
+.searchbar-container {
+  margin-top: 16pt;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease;
+}
+
+.searchinput {
+  width: 80vw;
+  height: 32pt;
+  border-radius: 50px;
+  border: 2px solid var(--color-dark-text);
+  background-color: var(--color-bg-beige);
+  color: var(--color-dark-text);
+  font-family: var(--font-body);
+  transition: width 0.3s ease;
+  padding: 0 16px;
+}
+
+.searchbar-container.focused .searchinput {
+  width: 95vw;
+}
+.dropdown-container {
+  width: 80vw;
+  border: 1px solid var(--color-dark-beige);
+  border-radius: 16px;
+  z-index: 10;
+  position: absolute;
+  background-color: var(--color-bg-secondary-beige);
+  margin-top: 42px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+.recipe-container {
+  margin-top: 48pt;
+  width: 90vw;
+  border: 2px solid black;
+  border-radius: 30px;
+}
+.pop-recipe-title {
+  height: 48px;
+  padding-left: 15%;
+  margin-top: 4px;
+  border-bottom: 1px solid black;
+  font-size: larger;
+}
+.pop-recipe {
+  width: 60vw;
+  height: 32px;
+  padding-left: 15%;
+  margin-top: 8px;
+  border-bottom: 1px solid black;
+}
+.pop-recipe-last {
+  width: 60vw;
+  height: 32px;
+  padding-left: 15%;
+  margin-top: 8px;
+}
+.dropdown-title {
+  padding: 8px 16px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-oliv);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.dropdown-item {
+  padding: 8px 16px;
+  font-size: 0.9rem;
+  color: var(--color-dark-text);
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background-color: var(--color-dark-beige);
+}

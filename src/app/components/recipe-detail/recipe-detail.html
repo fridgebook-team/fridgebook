@@ -1,0 +1,116 @@
+<div class="recipe-page" *ngIf="recipe; else recipeNotFound">
+  <section class="recipe-hero">
+    <a routerLink="/favorites" class="back-link">
+      <i class="bi bi-arrow-left"></i>
+      Zurueck
+    </a>
+
+    <div class="hero-card shadow-sm">
+      <div class="hero-image-wrapper">
+        <img [src]="recipe.image" [alt]="recipe.name" class="hero-image" />
+        <div class="hero-badge">{{ matchPercentage }}% Match mit deinem Kuehlschrank</div>
+      </div>
+
+      <div class="hero-content">
+        <div class="eyebrow">Rezeptvorlage #{{ recipeId ?? recipe.id }}</div>
+        <h1>{{ recipe.name }}</h1>
+        <p class="subtitle">{{ recipe.subtitle }}</p>
+
+        <div class="meta-grid">
+          <div class="meta-pill">
+            <i class="bi bi-clock-history"></i>
+            <span>{{ recipe.time }}</span>
+          </div>
+          <div class="meta-pill">
+            <i class="bi bi-bar-chart-line-fill"></i>
+            <span>{{ recipe.difficulty }}</span>
+          </div>
+          <div class="meta-pill">
+            <i class="bi bi-people-fill"></i>
+            <div class="d-flex align-items-center gap-2">
+              <span>{{ currentServings }} Portionen</span>
+              <button class="btn-round" (click)="decreaseServings()">-</button>
+              <button class="btn-round" (click)="increaseServings()">+</button>
+            </div>
+          </div>
+        </div>
+
+        <p class="description">{{ recipe.description }}</p>
+
+        <div class="tag-row">
+          <span *ngFor="let tag of recipe.tags" class="recipe-tag">{{ tag }}</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="content-grid">
+    <article class="content-card match-card">
+      <h2>Warum dieses Rezept passt</h2>
+      <p>Du hast bereits {{ matchPercentage }}% der Zutaten zuhause.</p>
+      <div class="match-progress">
+        <div class="match-progress-bar" [style.width.%]="matchPercentage"></div>
+      </div>
+
+      <h3>Fehlende Zutaten</h3>
+      <ul>
+        <li *ngFor="let ingredient of missingIngredients">{{ ingredient }}</li>
+      </ul>
+
+      <button class="btn-olive" (click)="addMissingToShoppingList()">Zur Einkaufsliste hinzufuegen</button>
+      <p *ngIf="showAddMessage" class="mt-3 mx-2 success-message">Zutaten wurden hinzugefügt!</p>
+    </article>
+
+    <article class="content-card ingredients-card">
+      <h2>Zutaten</h2>
+      <ul class="ingredient-list">
+        <li *ngFor="let ingredient of recipe.ingredients">
+          <span class="amount">{{ getIngredientAmount(ingredient.amount) }}</span>
+          <span>{{ ingredient.name }}</span>
+        </li>
+      </ul>
+    </article>
+
+    <article class="content-card steps-card">
+      <h2>Zubereitung</h2>
+      <div class="step-list">
+        <div *ngFor="let step of recipe.steps; let index = index" class="step-item">
+          <div class="step-number">{{ index + 1 }}</div>
+          <div>
+            <h3>{{ step.title }}</h3>
+            <p>{{ step.description }}</p>
+          </div>
+        </div>
+      </div>
+    </article>
+
+    <article class="content-card tips-card">
+      <h2>Kuechen-Tipps</h2>
+      <div class="tips-list">
+        <div *ngFor="let tip of recipe.tips" class="tip-item">
+          <i [class]="tip.icon"></i>
+          <p>{{ tip.text }}</p>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <button class="btn-cooked" [disabled]="recipeIsCooked" (click)="recipeCooked()">Rezept gekocht</button>
+  <p *ngIf="recipeCookedMessage" class="mt-3 text-center success-message">Die verwendete Zutaten wurden aus Ihrer Virtuellen Speisekammer entfernt!</p>
+
+</div>
+
+<ng-template #recipeNotFound>
+  <div class="recipe-page">
+    <section class="recipe-hero">
+      <a routerLink="/favorites" class="back-link">
+        <i class="bi bi-arrow-left"></i>
+        Zurueck
+      </a>
+      <div class="content-card empty-state">
+        <h1>Rezept nicht gefunden</h1>
+        <p>Fuer diese ID gibt es im Frontend-Template noch kein Rezept.</p>
+      </div>
+    </section>
+  </div>
+</ng-template>

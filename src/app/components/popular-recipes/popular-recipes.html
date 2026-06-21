@@ -1,0 +1,38 @@
+<div class="popular-recipe-container">
+  <div class="recipe-list-header">
+    <h3 id="PR1">Rezeptvorschlaege</h3>
+    <button type="button" class="refresh-button" (click)="generateRecipes()" [disabled]="isLoading">
+      <i class="bi bi-stars"></i>
+      Neu
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="state-message">
+    KI analysiert deinen Kuehlschrank...
+  </div>
+
+  <div *ngIf="errorMessage && !isLoading" class="state-message error">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="recipes.length === 0 && !isLoading && !errorMessage && !hasRequestedRecipes" class="state-message">
+    Keine Lebensmittel im Kuehlschrank gefunden.
+  </div>
+
+  <div *ngIf="recipes.length === 0 && !isLoading && !errorMessage && hasRequestedRecipes" class="state-message">
+    Noch keine Rezeptvorschlaege erhalten. Starte die Generierung nochmal mit Neu.
+  </div>
+
+  <a
+    *ngFor="let recipe of recipes"
+    class="pop-elem"
+    [routerLink]="['/recipes', recipe.id]"
+    (click)="clickPop(recipe.name)"
+  >
+    <img [src]="recipe.image" [alt]="recipe.name" />
+    <span class="recipe-name">{{ recipe.name }}</span>
+    <span class="recipe-meta">
+      {{ recipe.matchPercentage }}%
+    </span>
+  </a>
+</div>

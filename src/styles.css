@@ -1,0 +1,386 @@
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import url("bootstrap-icons/font/bootstrap-icons.css");
+
+:root {
+  /* COLORS */
+  color-scheme: light;
+  --color-bg-beige: #FAF5ED;
+  --color-bg-secondary-beige: #F6EBDB;
+  --color-dark-beige: #DBCAA5;
+  --color-dark-red: #68341D;
+  --color-oliv: #958D68;
+  --color-dark-text: #3E2C1F;
+
+  --color-green: #626C3E;
+
+
+
+  /* FONTS */
+  --font-header: 'Basteleur';
+  --font-body: 'Nohemi', sans-serif;
+}
+
+.vegan {
+  --color-bg-beige: #edfaf1;
+  --color-bg-secondary-beige: #dbf6e4;
+  --color-dark-beige: #a5dbb8;
+  --color-dark-red: #381938;
+  --color-oliv: #689577;
+  --color-dark-text: #1f3e2a;
+}
+
+.veggie {
+  --color-bg-beige: #edf9fa;
+  --color-bg-secondary-beige: #dbf6f6;
+  --color-dark-beige: #a5d5db;
+  --color-dark-red: #1d5768;
+  --color-oliv: #688e95;
+  --color-dark-text: #1f3c3e;
+}
+
+/* Basteleur */
+@font-face {
+  font-family: 'Basteleur';
+  src: url('assets/Basteleur-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* Nohemi */
+@font-face {
+  font-family: 'Nohemi';
+  src: url('assets/Nohemi-Regular-BF6438cc579d934.woff') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Nohemi SemiBold */
+@font-face {
+  font-family: 'Nohemi';
+  src: url('assets/Nohemi-SemiBold-BF6438cc57db2ff.woff') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Headers */
+h1 {
+  font-size: 1.5 rem;
+  color: var(--color-dark-text);
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-header);
+}
+
+body {
+  background-color: var(--color-bg-beige);
+  color: var(--color-dark-text);
+  font-family: var(--font-body);
+}
+
+/* buttons */
+button {
+  background: var(--color-dark-beige);
+  color: var(--color-dark-text);
+  font-weight: 600;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+}
+
+button:hover {
+  background: var(--color-oliv);
+}
+
+.btn-round {
+  background: var(--color-dark-beige);
+  color: var(--color-dark-text);
+  font-weight: 600;
+  font-size: small;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+
+  line-height: 1;
+  padding-top: 2px;
+}
+
+.fixed-buttons {
+  position: fixed;
+  bottom: 10%;
+
+  left: 0;
+  right: 0;
+  padding: 0 20px;
+  z-index: 100;
+
+  display: flex;
+  flex-direction: column;
+  pointer-events: none;
+}
+
+.fixed-action-buttons button {
+  pointer-events: auto;
+  width: fit-content;
+}
+
+.scan-btn {
+  min-width: 150px;
+}
+
+.btn-beige {
+  background: var(--color-dark-beige);
+  color: var(--color-dark-text);
+  font-weight: 600;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 50px;
+  font-size: smaller;
+}
+
+
+.btn-olive {
+  background: var(--color-oliv);
+  color: var(--color-bg-beige);
+  font-weight: 600;
+  border: none;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  border-radius: 50px;
+
+}
+button.btn-olive:hover {
+  background-color: var(--color-green) !important;
+  color: var(--color-bg-beige);
+}
+
+/* navbar */
+
+.container-fluid {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.nav-link {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20%;
+  height: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+  z-index: 1;
+  outline: none;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+
+  width: 20%;
+  height: 100%;
+  padding: 0 !important;
+  z-index: 1;
+}
+
+.nav-link.active::before {
+  content: "";
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+
+  width: 80%;
+  height: 70%;
+
+  background-color: var(--color-bg-beige);
+  border-radius: 50px;
+  z-index: -1;
+}
+
+.nav-link.active {
+  background-color: transparent !important;
+}
+
+.navbar-custom {
+  background-color: var(--color-dark-text);
+  border-radius: 50px;
+  width: 90%;
+  height: 6%;
+  margin: 0 auto;
+  bottom: 2%;
+}
+
+.nav-wrapper {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.nav-link svg {
+  color: var(--color-bg-beige);
+  /* transition: all 0.2s ease; */
+  /* font-size: 1.2rem; */
+
+
+  /* Festgelegte Größe hilft bei der Zentrierung */
+  width: 24px;
+  height: 24px;
+
+  /* Das hier zwingt das SVG in die Mitte, falls Flexbox zickt */
+  display: block;
+  flex-shrink: 0;
+
+  overflow: visible !important;
+
+}
+
+
+.nav-link.active {
+  /* background-color: var(--color-bg-beige) !important; */
+  /* border-radius: 50px; */
+  /* display: flex; */
+  /* align-items: center; */
+  /* justify-content: center; */
+  /* width: 50px; */
+  /* height: 25px; */
+}
+
+.nav-link.active svg {
+  color: var(--color-dark-text) !important;
+}
+
+
+
+
+
+/* temp input */
+.custom-input {
+  border: 2px solid var(--color-dark-text);
+  border-radius: 50px;
+  padding: 10px 20px;
+  color: var(--color-dark-text);
+  font-family: var(--font-body);
+}
+
+.space-above {
+  background-color: var(--color-oliv);
+  width: 100%;
+  height: 80px;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* recipe card */
+.recipe-card {
+  background-color: white;
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.content-wrapper {
+  font-size: small;
+  background-color: var(--color-bg-secondary-beige);
+  border-radius: 20px;
+  border: 10px solid white;
+}
+
+.content-wrapper .fw-bold {
+  font-size: 1.2em;
+  font-family: var(--font-body);
+  font-weight: 400;
+}
+
+.content-wrapper .details {
+  font-size: x-small;
+}
+
+.image-wrapper {
+  padding: 10px;
+}
+
+.image-wrapper img {
+  width: 120px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 15px;
+  border: 3px solid;
+}
+
+.badge-time {
+  background-color: var(--color-dark-beige);
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.progress {
+  background-color: var(--color-dark-beige);
+  border-radius: 10px;
+}
+
+.btn-dark {
+  background-color: var(--color-dark-text);
+  color: var(--color-bg-beige);
+  font-weight: 400;
+  font-size: .7em;
+  border: none;
+  /* padding: 0.5rem 1rem; */
+  cursor: pointer;
+  border-radius: 50px;
+  height: 25px;
+}
+
+.details .badge-time {
+  font-size: 1em;
+}
+
+/* .details .icon{
+  border-radius: 50%;
+  background-color: var(--color-dark-beige);
+  width: 25px;
+  height: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+} */
+
+/* vegan switch button */
+.vegan-inactive {
+  
+  background-color: var(--color-bg-beige);
+  color: var(--color-dark-text);
+  font-weight: 600;
+  height: 80%;
+  border: 2px solid var(--color-green);
+  display: flex;
+  align-items: center;
+  height: 35px;
+}
+
+.vegan-active {
+  background-color: var(--color-green);
+  color: var(--color-bg-beige);
+  font-weight: 600;
+  border: 2px solid transparent;
+  display: flex;
+  align-items: center;
+  height: 35px;
+}
+.switch-icon {
+  margin-left: 5px;
+  font-size: 1.2em;
+}

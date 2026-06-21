@@ -1,0 +1,102 @@
+<div class="space-above"></div>
+<div class="container py-4 mb-5">
+
+    <header class="text-center mb-1">
+        <h1 class="">Deine Favoriten!</h1>
+    </header>
+
+    <section>
+        <div class="mb-3 d-flex gap-2 align-items-center justify-content-center">
+            <!-- <button class="btn-beige sort-btn dropdown-toggle"><i class="bi bi-clock-fill"></i> 30min.</button> -->
+
+            <div class="dropdown">
+                <button class="btn-beige sort-btn dropdown-toggle" type="button" id="dropdownMenuTime"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-clock-fill"></i>
+                    {{ selectedTime }}
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenuTime">
+                    <li><button class="dropdown-item" (click)="setTimeFilter('30 min.')">&lt; 30 min.</button></li>
+                    <li><button class="dropdown-item" (click)="setTimeFilter('60 min.')">&lt; 60 min.</button></li>
+                    <li><button class="dropdown-item" (click)="setTimeFilter('90 min.')">&lt; 90 min.</button></li>
+                </ul>
+            </div>
+
+            <!--VEGGIE & VEGAN BUTTONS-->
+            <button class="btn-beige sort-btn btn-vegan" (click)="toggleVeggie()"
+                [ngClass]="veggieFilterOn ? 'vegan-active' : 'vegan-inactive'">
+
+                <!--<i class="bi bi-leaf-fill"></i>-->
+                <app-icon name="leaf2"></app-icon> VEGGIE
+                <i class="bi switch-icon" [ngClass]="veggieFilterOn ? 'bi-toggle-on' : 'bi-toggle-off'"></i>
+            </button>
+            <button class="btn-beige sort-btn btn-vegan" (click)="toggleVegan()"
+                [ngClass]="veganFilterOn ? 'vegan-active' : 'vegan-inactive'">
+
+                <!--<i class="bi bi-leaf-fill"></i> -->
+                <app-icon name="leafvegan"></app-icon> VEGAN
+                <i class="bi switch-icon" [ngClass]="veganFilterOn ? 'bi-toggle-on' : 'bi-toggle-off'"></i>
+            </button>
+        </div>
+    </section>
+
+
+
+
+    <div *ngFor="let recipe of filteredRecipes" class="recipe-card d-flex mb-3 shadow-sm">
+
+        <div class="image-wrapper">
+            <img [src]="recipe.image" alt="Recipe Image" [style.border-color]="recipe.borderColor">
+        </div>
+
+        <div class="content-wrapper flex-grow-1 p-2">
+            <div class="d-flex justify-content-between align-items-start">
+                <h5 class="fw-bold mb-1">{{ recipe.name }}</h5>
+            </div>
+
+            <div class="details d-flex align-items-center justify-content-between mb-1">
+                <span class="badge-time"><i class="bi bi-clock"></i> {{ recipe.time }}</span>
+                <!-- <div class="d-flex gap-2">
+                    <i *ngIf="recipe.isVegan" class="bi bi-leaf-fill text-success icon" style="font-size: 1.5em;"></i>
+                    <i class="bi icon" [ngClass]="recipe.isFavorite ? 'bi-heart-fill text-danger' : 'bi-heart'"
+                        style="font-size: 1.5em;"></i>
+                </div> -->
+
+                <div class="d-flex gap-2">
+                    <app-icon *ngIf="recipe.isVeggie" name="leaf2" class="icon vegan">
+                    </app-icon>
+
+                    <app-icon *ngIf="recipe.isVegan" name="leafvegan" class="icon vegan">
+                    </app-icon>
+
+                    <app-icon
+                        name="heart"
+                        class="icon heart"
+                        (click)="toggleFavorite(recipe)"
+                        [ngClass]="favoritesService.isFavorite(recipe.id) ? 'active-heart' : ''">
+                    </app-icon>
+                </div>
+            </div>
+
+            <div class="match-section d-flex align-items-end gap-3 mt-auto">
+                <div class="flex-grow-1">
+                    <span class="match-text d-block mb-1" [style.color]="recipe.borderColor"
+                        style="font-size: 0.8rem; font-weight: bold;">
+                        {{ recipe.matchPercentage }}%
+                    </span>
+                    <div class="progress" style="height: 8px;">
+                        <div class="progress-bar" [style.width.%]="recipe.matchPercentage"
+                            [style.background-color]="recipe.borderColor">
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-dark" [routerLink]="['/recipes', recipe.id]">
+                    Jetzt Kochen
+                </button>
+            </div>
+        </div>
+    </div>
+
+
+</div>
