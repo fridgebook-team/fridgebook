@@ -4,7 +4,9 @@ import { Icon } from '../icon/icon';
 import { RouterLink } from '@angular/router';
 import { FavoritesService } from '../../services/favorites';
 import { FridgeService } from '../../services/fridge';
-import { Recipe } from '../../models/recipe.models';
+import { RecipeService } from '../../services/recipe';
+import { Recipe } from '../../models/recipe';
+
 
 @Component({
   selector: 'app-favorites',
@@ -20,152 +22,19 @@ export class Favorites implements OnInit {
   constructor(
     public favoritesService: FavoritesService,
     private fridgeService: FridgeService,
+    private recipeService: RecipeService,
     private cdr: ChangeDetectorRef
   ) {}
 
   filteredRecipes: Recipe[] = [];
-
-  recipes: Recipe[] = [
-    {
-      id: 0,
-      name: 'Creamy Tuscan Ravioli',
-      image: 'images/recipes/ravioli.jpg',
-      time: '15 Min',
-      isVegan: true,
-      isVeggie: true,
-      matchPercentage: 0,
-      borderColor: '',
-      ingredients: [
-        'Ravioli',
-        'Olivenoel',
-        'Knoblauch',
-        'Kirschtomaten',
-        'Spinat',
-        'Sahne',
-        'Parmesan'
-      ]
-    },
-    {
-      id: 1,
-      name: 'Creamy Tuscan Ravioli',
-      image: 'images/recipes/ravioli.jpg',
-      time: '30 Min',
-      isVegan: false,
-      isVeggie: false,
-      matchPercentage: 0,
-      borderColor: '',
-      ingredients: [
-        'Ravioli',
-        'Olivenoel',
-        'Knoblauch',
-        'Kirschtomaten',
-        'Spinat',
-        'Sahne',
-        'Parmesan'
-      ]
-    },
-    {
-      id: 2,
-      name: 'Creamy Tuscan Ravioli',
-      image: 'images/recipes/ravioli.jpg',
-      time: '60 Min',
-      isVegan: false,
-      isVeggie: true,
-      matchPercentage: 0,
-      borderColor: '',
-      ingredients: [
-        'Ravioli',
-        'Olivenoel',
-        'Knoblauch',
-        'Kirschtomaten',
-        'Spinat',
-        'Sahne',
-        'Parmesan'
-      ]
-    },
-    {
-      id: 3,
-      name: 'Creamy Tuscan Ravioli',
-      image: 'images/recipes/ravioli.jpg',
-      time: '90 Min',
-      isVegan: true,
-      isVeggie: true,
-      matchPercentage: 0,
-      borderColor: '',
-      ingredients: [
-        'Ravioli',
-        'Olivenoel',
-        'Knoblauch',
-        'Kirschtomaten',
-        'Spinat',
-        'Sahne',
-        'Parmesan'
-      ]
-    },
-    {
-      id: 4,
-      name: 'Creamy Tuscan Ravioli',
-      image: 'images/recipes/ravioli.jpg',
-      time: '30 Min',
-      isVegan: false,
-      isVeggie: false,
-      matchPercentage: 0,
-      borderColor: '',
-      ingredients: [
-        'Ravioli',
-        'Olivenoel',
-        'Knoblauch',
-        'Kirschtomaten',
-        'Spinat',
-        'Sahne',
-        'Parmesan'
-      ]
-    },
-    {
-      id: 5,
-      name: 'Creamy Tuscan Ravioli',
-      image: 'images/recipes/ravioli.jpg',
-      time: '30 Min',
-      isVegan: true,
-      isVeggie: true,
-      matchPercentage: 0,
-      borderColor: '',
-      ingredients: [
-        'Ravioli',
-        'Olivenoel',
-        'Knoblauch',
-        'Kirschtomaten',
-        'Spinat',
-        'Sahne',
-        'Parmesan'
-      ]
-    },
-    {
-      id: 6,
-      name: 'Creamy Tuscan Ravioli',
-      image: 'images/recipes/ravioli.jpg',
-      time: '30 Min',
-      isVegan: false,
-      isVeggie: true,
-      matchPercentage: 0,
-      borderColor: '',
-      ingredients: [
-        'Ravioli',
-        'Olivenoel',
-        'Knoblauch',
-        'Kirschtomaten',
-        'Spinat',
-        'Sahne',
-        'Parmesan'
-      ]
-    }
-  ];
+  recipes: Recipe[] = [];
 
   async ngOnInit() {
     await this.favoritesService.loadFavorites();
     await this.fridgeService.loadItems();
-    const savedTime = localStorage.getItem('favoritesTimeFilter');
+    this.recipes = this.recipeService.getRecipes();
 
+    const savedTime = localStorage.getItem('favoritesTimeFilter');
     if (savedTime) {
       this.selectedTime = savedTime;
     }
@@ -173,9 +42,7 @@ export class Favorites implements OnInit {
     this.veganFilterOn = document.documentElement.classList.contains('vegan') || false;
     this.veggieFilterOn = document.documentElement.classList.contains('veggie') || false;
 
-    //initial rendern
     this.filteredRecipes = [...this.recipes];
-
     this.applyFilters();
     this.cdr.detectChanges();
   }
@@ -187,31 +54,23 @@ export class Favorites implements OnInit {
   }
 
   toggleVeggie() {
-    // vegan ausschalten
     this.veganFilterOn = false;
     document.documentElement.classList.remove('vegan');
-
     this.veggieFilterOn = !this.veggieFilterOn;
     document.documentElement.classList.toggle('veggie', this.veggieFilterOn);
-
     this.applyFilters();
   }
 
   toggleVegan() {
-    // veggie ausschalten
     this.veggieFilterOn = false;
     document.documentElement.classList.remove('veggie');
-
     this.veganFilterOn = !this.veganFilterOn;
     document.documentElement.classList.toggle('vegan', this.veganFilterOn);
-    
     this.applyFilters();
   }
-  
+
   async toggleFavorite(recipe: Recipe) {
     await this.favoritesService.toggleFavorite(recipe.id);
-
-    //neue favoriten (ohne die gelöschte) laden
     await this.favoritesService.loadFavorites();
     this.applyFilters();
     this.cdr.detectChanges();
@@ -223,43 +82,35 @@ export class Favorites implements OnInit {
 
       if (recipe.matchPercentage >= 70) {
         recipe.borderColor = '#4A5D23';
-      }
-      else if (recipe.matchPercentage >= 40) {
+      } else if (recipe.matchPercentage >= 40) {
         recipe.borderColor = '#b38728';
-      }
-      else {
+      } else {
         recipe.borderColor = '#a12424';
       }
-
     });
 
     const timeLimit = parseInt(this.selectedTime);
-
     const favIds = this.favoritesService.favoriteIds;
 
     this.filteredRecipes = this.recipes.filter(recipe => {
-
-      // nur Favorites anzeigen
       const isFavorite = favIds.includes(recipe.id);
       if (!isFavorite) return false;
 
       const recipeTime = parseInt(recipe.time);
       const matchesTime = recipeTime <= timeLimit;
-
       const matchesVegan = this.veganFilterOn ? recipe.isVegan : true;
-      const matchesVeggie = this.veggieFilterOn ? recipe.isVeggie : true;
+      const matchesVeggie = this.veggieFilterOn ? (recipe.isVeggie ?? false) : true;
 
       return matchesTime && matchesVegan && matchesVeggie;
     });
   }
 
   calculateMatch(recipe: Recipe): number {
-
     const fridgeNames = this.fridgeService.items.map(item =>
       item.name.toLowerCase().trim()
     );
 
-    const ingredients = recipe.ingredients ?? [];
+    const ingredients = recipe.ingredients.map(i => i.name);
 
     const matches = ingredients.filter(ingredient => {
       const ing = ingredient.toLowerCase().trim();
@@ -268,6 +119,4 @@ export class Favorites implements OnInit {
 
     return ingredients.length === 0 ? 0 : Math.round(matches / ingredients.length * 100);
   }
-
 }
-
