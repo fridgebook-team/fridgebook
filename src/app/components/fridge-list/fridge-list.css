@@ -24,3 +24,7 @@
   font-size: 1.2rem;
   color: var(--color-dark-text);
 }
+
+.list-group {
+  margin-bottom: 10em;
+}

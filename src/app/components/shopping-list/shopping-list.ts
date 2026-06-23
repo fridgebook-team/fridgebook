@@ -78,8 +78,29 @@ export class ShoppingList implements OnInit {
     this.cdr.detectChanges();
   }
 
+  moveMessage: string = '';
+
   async removeItem(item: ShoppingItem) {
+    const existing = this.fridgeService.items.find(i => i.name === item.name);
+
+    if (existing) {
+      existing.quantity += item.quantity ?? 1;
+      await this.fridgeService.updateItem(existing);
+    } else {
+      await this.fridgeService.addItem({
+      name: item.name,
+      quantity: item.quantity ?? 1,
+      unit: item.unit ?? 'Stk',
+      expiry: undefined
+    });
+    }
+
     await this.shoppingListService.removeItem(item);
+
+    this.moveMessage = 'Artikel wurde in Ihre virtuelle Speisekammer verschoben!';
+    this.cdr.detectChanges();
+    setTimeout(() => { this.moveMessage = ''; }, 2500);
+    
     this.cdr.detectChanges();
   }
 

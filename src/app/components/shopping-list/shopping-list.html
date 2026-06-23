@@ -9,6 +9,7 @@
 
   <section>
     <p class="section-label">{{ items.length }} Artikel</p>
+    <p class="section-label" style="text-align: center;" *ngIf="moveMessage">{{ moveMessage }}</p>
     <div class="shopping-list">
       @for (item of items; track item.id) {
         <div class="shopping-item">
@@ -57,6 +58,7 @@
       <button class="btn-olive" (click)="submitNewItem()" [disabled]="!newItem.name">Hinzufügen</button>
     </div>
 
+    <p class="section-label">Zur Virtuellen Speisekammer hinzufügen:  </p>
     <div class="scan-row">
       <button class="btn-beige scan-btn" (click)="openBarcode()" [disabled]="barcodeScannerRef.isLookupLoading">
         <i class="bi bi-upc-scan me-1"></i> Barcode
@@ -64,4 +66,5 @@
       <app-receipt-scan-button (statusChange)="onStatusChange($event)" />
     </div>
   </div>
+  
 }
