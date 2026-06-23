@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, timeout } from 'rxjs';
 
 import { Recipe } from '../models/recipe';
 import { FridgeItem, FridgeService } from './fridge';
@@ -26,24 +26,27 @@ export class RecipeService {
   }
 
   async generateRecipesFromFridge(): Promise<Recipe[]> {
+    await this.fridgeService.loadItems();
     const fridgeItems = this.fridgeService.items;
 
     if (fridgeItems.length === 0) {
       this.recipes = [];
       this.saveRecipes();
-      return this.recipes;
+      throw new Error('Keine Lebensmittel im Kuehlschrank gefunden. Fuege zuerst Zutaten hinzu.');
     }
 
     const response: any = await firstValueFrom(
-      this.http.post(
-        '/api/groq/openai/v1/chat/completions',
-        this.buildRequestBody(fridgeItems),
-        {
-          headers: {
-            'Content-Type': 'application/json',
+      this.http
+        .post(
+          '/api/groq/openai/v1/chat/completions',
+          this.buildRequestBody(fridgeItems),
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
           },
-        },
-      ),
+        )
+        .pipe(timeout(20000)),
     );
 
     const content = response.choices?.[0]?.message?.content ?? '';
@@ -67,7 +70,7 @@ export class RecipeService {
     }));
 
     return {
-      model: 'meta-llama/llama-4-scout-17b-16e-instruct',
+      model: 'llama-3.3-70b-versatile',
       messages: [
         {
           role: 'system',
@@ -81,7 +84,7 @@ Erstelle 5 realistische Rezepte auf Deutsch.
 Sortiere sie nach hoechster Uebereinstimmung mit vorhandenen Zutaten.
 Berechne matchPercentage als Anteil vorhandener Hauptzutaten an allen benoetigten Hauptzutaten.
 Nutze moeglichst viele vorhandene Zutaten und vermeide Rezepte mit vielen fehlenden Spezialzutaten.
-Antworte ausschliesslich als JSON-Array.
+Antworte ausschliesslich als JSON-Objekt mit dem Feld "recipes".
 Jedes Objekt hat exakt diese Felder:
 {
   "name": "string",
@@ -101,6 +104,7 @@ Jedes Objekt hat exakt diese Felder:
 }`,
         },
       ],
+      response_format: { type: 'json_object' },
       temperature: 0.4,
       max_tokens: 3000,
     };
@@ -212,8 +216,13 @@ Jedes Objekt hat exakt diese Felder:
   }
 
   private loadStoredRecipes(): Recipe[] {
-    const storedRecipes = localStorage.getItem(this.storageKey);
-    return storedRecipes ? JSON.parse(storedRecipes) : [];
+    try {
+      const storedRecipes = localStorage.getItem(this.storageKey);
+      return storedRecipes ? JSON.parse(storedRecipes) : [];
+    } catch {
+      localStorage.removeItem(this.storageKey);
+      return [];
+    }
   }
 
   private saveRecipes() {

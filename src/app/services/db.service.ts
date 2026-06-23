@@ -3,131 +3,160 @@ import { Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-
 export class DbService {
+  db!: IDBDatabase;
+  dbReady!: Promise<void>;
 
-    db!: IDBDatabase;
-    dbReady!: Promise<void>; //keine funktion darf gecalled werden, bevor db ready ist
+  private readonly storeNames = ['einkaufsliste', 'lebensmittel', 'favorites'];
+  private readonly memoryStores = new Map<string, any[]>();
+  private readonly memoryIds = new Map<string, number>();
+  private readonly indexedDBApi: IDBFactory | undefined =
+    window.indexedDB ||
+    (window as any).mozIndexedDB ||
+    (window as any).webkitIndexedDB ||
+    (window as any).msIndexedDB ||
+    (window as any).shimIndexedDB;
 
-    constructor() { this.initDB(); }
+  constructor() {
+    this.storeNames.forEach((storeName) => {
+      this.memoryStores.set(storeName, []);
+      this.memoryIds.set(storeName, 1);
+    });
 
-    //checkt verschiedene Browser
-    private indexedDB =
-        window.indexedDB ||
-        (window as any).mozIndexedDB ||
-        (window as any).webkitIndexedDB ||
-        (window as any).msIndexedDB ||
-        (window as any).shimIndexedDB;
+    this.initDB();
+  }
 
-    // öffnen bzw erstellt FridgeBookDB
-    private initDB() {
-        this.dbReady = new Promise((resolve, reject) => {
-            const request = this.indexedDB.open("FridgeBookDB", 3);
-
-            // checkt zuerst nach error bei request
-            request.onerror = (event: any) => {
-                console.error("An error occured with indexedDB");
-                console.error(event);
-            };
-
-            // bei Neuerstellung oder neuer Versionsnummer - Schema
-            request.onupgradeneeded = () => {
-                const fbdb = request.result; //FridgeBookDB
-
-                if (!fbdb.objectStoreNames.contains("einkaufsliste")) {
-                        fbdb.createObjectStore("einkaufsliste", { keyPath: "id", autoIncrement: true });
-                    }          
-                // eklstore.colorIndex("eklItem_color", ["color"], { unique: false }); -- nach Index kann gesucht werden
-
-                if (!fbdb.objectStoreNames.contains("lebensmittel")) {
-                        fbdb.createObjectStore("lebensmittel", { keyPath: "id", autoIncrement: true });
-                    }                
-                // hier speichern wir zusätzlich: name, menge, ablaufdatum, hinzugefügt am
-
-                if (!fbdb.objectStoreNames.contains("favorites")) {
-                        fbdb.createObjectStore("favorites", { keyPath: "id" });
-                    }                
-                //hier werden ids der favourite recipes gespeichert
-            };
-
-            request.onsuccess = () => { 
-                this.db = request.result; //FridgeBookDB 
-                console.log("DB READY");
-                resolve();
-            }; 
-            request.onerror = (e) => {
-                console.error("DB error:", e);
-                reject(e);
-            };
-        });
+  private initDB() {
+    if (!this.indexedDBApi) {
+      this.dbReady = Promise.resolve();
+      return;
     }
 
-    // Einfügen
-    async add(storeName: string, item: any): Promise<any> {
-        await this.dbReady;
-        
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction(storeName, "readwrite");
-            const store = transaction.objectStore(storeName);
+    this.dbReady = new Promise((resolve, reject) => {
+      const request = this.indexedDBApi!.open('FridgeBookDB', 3);
 
-            const request = store.add(item);
+      request.onupgradeneeded = () => {
+        const fbdb = request.result;
 
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = reject;
-        });
+        for (const storeName of this.storeNames) {
+          if (!fbdb.objectStoreNames.contains(storeName)) {
+            fbdb.createObjectStore(storeName, { keyPath: 'id', autoIncrement: true });
+          }
+        }
+      };
+
+      request.onsuccess = () => {
+        this.db = request.result;
+        console.log('DB READY');
+        resolve();
+      };
+
+      request.onerror = (event) => {
+        console.error('DB error:', event);
+        reject(event);
+      };
+    });
+  }
+
+  async add(storeName: string, item: any): Promise<any> {
+    await this.dbReady;
+
+    if (!this.db) {
+      const store = this.getMemoryStore(storeName);
+      const id = item.id ?? this.nextMemoryId(storeName);
+      store.push({ ...item, id });
+      return id;
     }
 
-    // Update (überschreibt bestehenden Eintrag)
-    async update(storeName: string, item: any): Promise<any> {
-        await this.dbReady;
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction(storeName, 'readwrite');
+      const store = transaction.objectStore(storeName);
+      const request = store.add(item);
 
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction(storeName, "readwrite");
-            const store = transaction.objectStore(storeName);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = reject;
+    });
+  }
 
-            const request = store.put(item); //put = update oder insert
+  async update(storeName: string, item: any): Promise<any> {
+    await this.dbReady;
 
-            request.onsuccess = () => resolve(request.result);
-            request.onerror = reject;
-        });
+    if (!this.db) {
+      const store = this.getMemoryStore(storeName);
+      const index = store.findIndex((storedItem) => storedItem.id === item.id);
+
+      if (index === -1) {
+        store.push({ ...item, id: item.id ?? this.nextMemoryId(storeName) });
+      } else {
+        store[index] = { ...item };
+      }
+
+      return item.id;
     }
 
-    // Suchen (alle)
-    async getAll(storeName: string): Promise<any[]> {
-        console.log("2: getAll called:", storeName);
-        await this.dbReady;
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction(storeName, 'readwrite');
+      const store = transaction.objectStore(storeName);
+      const request = store.put(item);
 
-        return new Promise((resolve, reject) => {
-            const transaction = this.db.transaction(storeName, "readonly");
-            const store = transaction.objectStore(storeName);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = reject;
+    });
+  }
 
-            const request = store.getAll();
+  async getAll(storeName: string): Promise<any[]> {
+    await this.dbReady;
 
-            request.onsuccess = () => {
-                console.log("2: getAll result:", request.result);
-                resolve(request.result);
-                };
-
-                request.onerror = (e) => {
-                console.error("2: getAll error", e);
-                reject(e);
-            };
-        
-        });
+    if (!this.db) {
+      return this.getMemoryStore(storeName).map((item) => ({ ...item }));
     }
 
-    // Löschen
-    async delete(storeName: string, id: number): Promise<void> {
-        await this.dbReady;
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction(storeName, 'readonly');
+      const store = transaction.objectStore(storeName);
+      const request = store.getAll();
 
-        return new Promise((resolve, reject) => {
-        const transaction = this.db.transaction(storeName, "readwrite");
-        const store = transaction.objectStore(storeName);
+      request.onsuccess = () => resolve(request.result);
+      request.onerror = reject;
+    });
+  }
 
-        const request = store.delete(id);
+  async delete(storeName: string, id: number): Promise<void> {
+    await this.dbReady;
 
-        request.onsuccess = () => resolve();
-        request.onerror = reject;
-        });
+    if (!this.db) {
+      const store = this.getMemoryStore(storeName);
+      const index = store.findIndex((item) => item.id === id);
+
+      if (index !== -1) {
+        store.splice(index, 1);
+      }
+
+      return;
     }
+
+    return new Promise((resolve, reject) => {
+      const transaction = this.db.transaction(storeName, 'readwrite');
+      const store = transaction.objectStore(storeName);
+      const request = store.delete(id);
+
+      request.onsuccess = () => resolve();
+      request.onerror = reject;
+    });
+  }
+
+  private getMemoryStore(storeName: string): any[] {
+    if (!this.memoryStores.has(storeName)) {
+      this.memoryStores.set(storeName, []);
+      this.memoryIds.set(storeName, 1);
+    }
+
+    return this.memoryStores.get(storeName)!;
+  }
+
+  private nextMemoryId(storeName: string): number {
+    const nextId = this.memoryIds.get(storeName) ?? 1;
+    this.memoryIds.set(storeName, nextId + 1);
+    return nextId;
+  }
 }

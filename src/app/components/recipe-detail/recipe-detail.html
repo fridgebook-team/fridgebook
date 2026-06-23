@@ -58,7 +58,7 @@
       </ul>
 
       <button class="btn-olive" (click)="addMissingToShoppingList()">Zur Einkaufsliste hinzufuegen</button>
-      <p *ngIf="showAddMessage" class="mt-3 mx-2 success-message">Zutaten wurden hinzugefügt!</p>
+      <p *ngIf="showAddMessage" class="mt-3 mx-2 success-message">Zutaten wurden hinzugefuegt!</p>
     </article>
 
     <article class="content-card ingredients-card">
@@ -96,8 +96,9 @@
   </section>
 
   <button class="btn-cooked" [disabled]="recipeIsCooked" (click)="recipeCooked()">Rezept gekocht</button>
-  <p *ngIf="recipeCookedMessage" class="mt-3 text-center success-message">Die verwendete Zutaten wurden aus Ihrer Virtuellen Speisekammer entfernt!</p>
-
+  <p *ngIf="recipeCookedMessage" class="mt-3 text-center success-message">
+    Die verwendeten Zutaten wurden aus Ihrer Virtuellen Speisekammer entfernt!
+  </p>
 </div>
 
 <ng-template #recipeNotFound>
