@@ -13,23 +13,18 @@ export interface RecipeTip {
   text: string;
 }
 
-export interface Recipe {
+export interface RecipeDetail {
   id: number;
-  name: string;
+  title: string;
   subtitle: string;
   image: string;
-  time: string;
+  badge: string;
+  duration: string;
   difficulty: string;
-  servings: string;
-  isVegan: boolean;
-  isVeggie?: boolean;
-  isFavorite: boolean;
-  matchPercentage: number;
-  borderColor: string;
+  servings: number;
+  matchLabel: string;
   description: string;
   tags: string[];
-  matchedIngredients: string[];
-  missingIngredients: string[];
   ingredients: RecipeIngredient[];
   steps: RecipeStep[];
   tips: RecipeTip[];

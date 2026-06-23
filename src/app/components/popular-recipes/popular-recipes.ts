@@ -62,7 +62,7 @@ export class PopularRecipes implements OnInit {
     return error instanceof Error ? error.message : 'Rezepte konnten nicht generiert werden.';
   }
 
-  clickPop(rezeptname : string) {
+  clickPop(rezeptname: string) {
     console.log(rezeptname + 'wurde geclickt');
   }
 }

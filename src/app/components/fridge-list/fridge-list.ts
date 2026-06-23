@@ -1,19 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { FridgeService, FridgeItem } from '../../services/fridge';
 
 @Component({
   selector: 'app-fridge-list',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './fridge-list.html',
   styleUrls: ['./fridge-list.css']
 })
-export class FridgeListComponent {
+export class FridgeListComponent implements OnInit {
   searchTerm: string = '';
   currentSort: 'name' | 'quantity' | 'expiry' = 'name';
 
-  constructor(public fridgeService: FridgeService) {}
+  showAddModal = false;
+  newItem = { name: '', quantity: 1, unit: 'Stk', expiry: '' };
+
+  constructor(
+    public fridgeService: FridgeService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  async ngOnInit() {
+    await this.fridgeService.loadItems();
+    this.cdr.detectChanges(); // UI update
+  }
 
   get items() {
     return this.fridgeService.items;
@@ -23,6 +35,7 @@ export class FridgeListComponent {
     let list = this.items.filter(item =>
       item.name.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
+
     if (this.currentSort === 'name') {
       list.sort((a, b) => {
         const nameA = a.name.replace(/[\u1000-\uFFFF]+/g, '').trim().toLowerCase();
@@ -45,21 +58,49 @@ export class FridgeListComponent {
     this.searchTerm = event.target.value;
   }
 
-  removeItem(item: FridgeItem) {
-    this.fridgeService.removeItem(item);
+  openAddModal() {
+    this.newItem = { name: '', quantity: 1, unit: 'Stk', expiry: '' };
+    this.showAddModal = true;
   }
 
-  increaseQuantity(item: FridgeItem) {
+  closeAddModal() {
+    this.showAddModal = false;
+  }
+
+  async submitNewItem() {
+    if (!this.newItem.name || !this.newItem.quantity) return;
+    await this.fridgeService.addItem({
+      name: this.newItem.name.trim(),
+      quantity: this.newItem.quantity,
+      unit: this.newItem.unit,
+      expiry: this.newItem.expiry || undefined,
+    });
+    this.showAddModal = false;
+    this.cdr.detectChanges();
+  }
+
+  async removeItem(item: FridgeItem) {
+    await this.fridgeService.removeItem(item);
+    this.cdr.detectChanges(); // UI update
+  }
+
+  async increaseQuantity(item: FridgeItem) {
     const step = (item.unit === 'g' || item.unit === 'ml') ? 10 : 1;
     item.quantity += step;
+
+    await this.fridgeService.updateItem(item); // WICHTIG DB sync
+    this.cdr.detectChanges();
   }
 
-  decreaseQuantity(item: FridgeItem) {
+  async decreaseQuantity(item: FridgeItem) {
     const step = (item.unit === 'g' || item.unit === 'ml') ? 10 : 1;
+
     if (item.quantity > step) {
       item.quantity -= step;
+      await this.fridgeService.updateItem(item);
     } else {
-      this.fridgeService.removeItem(item);
+      await this.fridgeService.removeItem(item);
     }
+    this.cdr.detectChanges();
   }
 }

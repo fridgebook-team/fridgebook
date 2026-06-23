@@ -2,7 +2,7 @@
   padding: 1.5rem 1rem 7rem;
   background:
     radial-gradient(circle at top right, rgba(149, 141, 104, 0.18), transparent 28%),
-    linear-gradient(180deg, #efe1cc 0%, var(--color-bg-beige) 28%, var(--color-bg-beige) 100%);
+    linear-gradient(180deg, var(--color-dark-beige) 0%, var(--color-bg-beige) 28%, var(--color-bg-beige) 100%);
   min-height: 100vh;
 }
 
@@ -51,7 +51,7 @@
   position: absolute;
   left: 2rem;
   bottom: 2rem;
-  background: rgba(250, 245, 237, 0.94);
+  background: var(--color-dark-beige);
   color: var(--color-dark-red);
   padding: 0.55rem 0.95rem;
   border-radius: 999px;
@@ -265,12 +265,36 @@ h1 {
   align-items: start;
   padding: 0.95rem;
   border-radius: 20px;
-  background: rgba(246, 235, 219, 0.9);
+  background: var(--color-bg-secondary-beige);
 }
+
 
 .tip-item i {
   color: var(--color-green);
   font-size: 1.25rem;
+}
+
+.btn-cooked {
+  width: 100%;
+  margin-top: 2rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+
+  font-size: 1.1rem;
+  font-weight: bold;
+
+  background-color: var(--color-green);
+  color: white;
+}
+
+.btn-cooked:hover {
+  opacity: 0.9;
+}
+
+.btn-cooked:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 @media (max-width: 768px) {

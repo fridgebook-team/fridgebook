@@ -1,37 +1,56 @@
 import { Injectable } from '@angular/core';
+import { DbService } from './db.service';
+import { FridgeItem } from '../models/fridge.models';
 
-export interface FridgeItem {
-  name: string;
-  quantity: number;
-  unit: string;
-  expiry?: string;
-}
+export type { FridgeItem };
 
 @Injectable({
   providedIn: 'root',
 })
 export class FridgeService {
 
-  items: FridgeItem[] = [
-    { name: '🥛 Milk', quantity: 1, unit: 'liter', expiry: '2026-03-28' },
-    { name: '🧀 Cheese', quantity: 200, unit: 'g', expiry: '2026-04-15' },
-    { name: '🥚 Eggs', quantity: 6, unit: 'pieces', expiry: '2026-04-10' },
-    { name: '🥬 Lettuce', quantity: 1, unit: 'head', expiry: '2026-03-25' },
-    { name: '🍅 Tomatoes', quantity: 4, unit: 'pieces', expiry: '2026-03-27' }
-  ];
+  items: FridgeItem[] = [];
 
-  addItem(item: FridgeItem) {
+  constructor(private db: DbService) {}
+
+  //Alles laden
+  async loadItems() {
+    this.items = await this.db.getAll("lebensmittel");
+    console.log("fridge service: items after load:", this.items);
+  }
+
+  // Hinzufügen
+  async addItem(item: Omit<FridgeItem, 'id' | 'addedAt'>) {
+    console.log("fridge shopping-list: addItem:", item);
+
+    const newItem: FridgeItem = {
+      ...item,
+      addedAt: new Date().toISOString() // hinzugefügt am
+    };
+
     const existing = this.items.find(i =>
       i.name.toLowerCase() === item.name.toLowerCase()
     );
+
     if (existing) {
       existing.quantity += item.quantity;
+      await this.updateItem(existing);
     } else {
-      this.items.push(item);
+      await this.db.add("lebensmittel", newItem);
     }
+
+    await this.loadItems();
   }
 
-  removeItem(item: FridgeItem) {
-    this.items = this.items.filter(i => i !== item);
+  // Updaten
+  async updateItem(item: FridgeItem) {
+    await this.db.update("lebensmittel", item);
+    await this.loadItems(); // reload damit UI stimmt
+  }
+
+  // Löschen
+  async removeItem(item: FridgeItem) {
+    await this.db.delete("lebensmittel", item.id!);
+    await this.loadItems();
   }
 }

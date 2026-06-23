@@ -8,7 +8,7 @@
     <div class="hero-card shadow-sm">
       <div class="hero-image-wrapper">
         <img [src]="recipe.image" [alt]="recipe.name" class="hero-image" />
-        <div class="hero-badge">{{ recipe.matchPercentage }}% Match mit deinem Kuehlschrank</div>
+        <div class="hero-badge">{{ matchPercentage }}% Match mit deinem Kuehlschrank</div>
       </div>
 
       <div class="hero-content">
@@ -27,7 +27,11 @@
           </div>
           <div class="meta-pill">
             <i class="bi bi-people-fill"></i>
-            <span>{{ recipe.servings }}</span>
+            <div class="d-flex align-items-center gap-2">
+              <span>{{ currentServings }} Portionen</span>
+              <button class="btn-round" (click)="decreaseServings()">-</button>
+              <button class="btn-round" (click)="increaseServings()">+</button>
+            </div>
           </div>
         </div>
 
@@ -43,37 +47,25 @@
   <section class="content-grid">
     <article class="content-card match-card">
       <h2>Warum dieses Rezept passt</h2>
-      <p>Du hast bereits {{ recipe.matchPercentage }}% der passenden Zutaten zuhause und musst nur wenig dazukaufen.</p>
+      <p>Du hast bereits {{ matchPercentage }}% der Zutaten zuhause.</p>
       <div class="match-progress">
-        <div class="match-progress-bar" [style.width.%]="recipe.matchPercentage"></div>
+        <div class="match-progress-bar" [style.width.%]="matchPercentage"></div>
       </div>
-      <div class="ingredient-match-grid">
-        <div>
-          <h3>Vorhanden</h3>
-          <span *ngFor="let ingredient of recipe.matchedIngredients" class="match-chip available">
-            {{ ingredient }}
-          </span>
-        </div>
-        <div>
-          <h3>Fehlt noch</h3>
-          <span *ngFor="let ingredient of recipe.missingIngredients" class="match-chip missing">
-            {{ ingredient }}
-          </span>
-        </div>
-      </div>
-      <button class="btn-olive" (click)="addMissingIngredientsToShoppingList()">
-        Zur Einkaufsliste hinzufuegen
-      </button>
-      <p *ngIf="shoppingListMessage" class="shopping-list-message">
-        {{ shoppingListMessage }}
-      </p>
+
+      <h3>Fehlende Zutaten</h3>
+      <ul>
+        <li *ngFor="let ingredient of missingIngredients">{{ ingredient }}</li>
+      </ul>
+
+      <button class="btn-olive" (click)="addMissingToShoppingList()">Zur Einkaufsliste hinzufuegen</button>
+      <p *ngIf="showAddMessage" class="mt-3 mx-2 success-message">Zutaten wurden hinzugefuegt!</p>
     </article>
 
     <article class="content-card ingredients-card">
       <h2>Zutaten</h2>
       <ul class="ingredient-list">
         <li *ngFor="let ingredient of recipe.ingredients">
-          <span class="amount">{{ ingredient.amount }}</span>
+          <span class="amount">{{ getIngredientAmount(ingredient.amount) }}</span>
           <span>{{ ingredient.name }}</span>
         </li>
       </ul>
@@ -102,6 +94,11 @@
       </div>
     </article>
   </section>
+
+  <button class="btn-cooked" [disabled]="recipeIsCooked" (click)="recipeCooked()">Rezept gekocht</button>
+  <p *ngIf="recipeCookedMessage" class="mt-3 text-center success-message">
+    Die verwendeten Zutaten wurden aus Ihrer Virtuellen Speisekammer entfernt!
+  </p>
 </div>
 
 <ng-template #recipeNotFound>
