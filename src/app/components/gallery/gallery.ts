@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { Recipe } from '../../models/recipe.models';
+import { Recipe } from '../../models/recipe';
 
 export type { Recipe };
 

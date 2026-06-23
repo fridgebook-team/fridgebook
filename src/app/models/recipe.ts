@@ -22,15 +22,15 @@ export interface Recipe {
   difficulty: string;
   servings: string;
   isVegan: boolean;
-  isVeggie?: boolean;
-  isFavorite: boolean;
+  isVeggie: boolean;
+  isFavorite?: boolean;
   matchPercentage: number;
   borderColor: string;
   description: string;
   tags: string[];
-  matchedIngredients: string[];
-  missingIngredients: string[];
+  matchedIngredients?: string[];
+  missingIngredients?: string[];
   ingredients: RecipeIngredient[];
   steps: RecipeStep[];
-  tips: RecipeTip[];
+  tips?: RecipeTip[];
 }
