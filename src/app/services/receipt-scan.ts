@@ -11,8 +11,6 @@ export type { Product };
 })
 export class ReceiptScanService {
 
-  private apiKey = 'groq_API_key';
-
   constructor(private http: HttpClient) {}
 
   async scanReceipt(base64Image: string): Promise<Product[]> {
@@ -50,11 +48,10 @@ export class ReceiptScanService {
 
     const response: any = await firstValueFrom(
       this.http.post(
-        'https://api.groq.com/openai/v1/chat/completions',
+        '/api/groq/openai/v1/chat/completions',
         body,
         {
           headers: {
-            'Authorization': `Bearer ${this.apiKey}`,
             'Content-Type': 'application/json'
           }
         }

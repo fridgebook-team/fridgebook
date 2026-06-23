@@ -51,6 +51,11 @@ export class RecipeDetailComponent implements OnInit {
     const fridge = this.fridgeService.items.map(item => item.name.toLowerCase().trim());
     const recipeIngredients = this.recipe.ingredients.map(i => i.name.toLowerCase().trim());
 
+    if (recipeIngredients.length === 0) {
+      this.matchPercentage = 0;
+      return;
+    }
+
     let matched = 0;
     this.missingIngredients = [];
 
@@ -70,6 +75,8 @@ export class RecipeDetailComponent implements OnInit {
   }
 
   async addMissingToShoppingList() {
+    await this.shoppingListService.loadItems();
+
     for (const ingredient of this.missingIngredients) {
       await this.shoppingListService.addItem(ingredient);
     }

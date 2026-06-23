@@ -1,7 +1,7 @@
 <div class="popular-recipe-container">
   <div class="recipe-list-header">
     <h3 id="PR1">Rezeptvorschlaege</h3>
-    <button type="button" class="refresh-button" (click)="generateRecipes()" [disabled]="isLoading">
+    <button type="button" class="refresh-button" (click)="generateRecipes($event)" [disabled]="isLoading">
       <i class="bi bi-stars"></i>
       Neu
     </button>

@@ -111,6 +111,9 @@ export class Favorites implements OnInit {
     );
 
     const ingredients = recipe.ingredients.map(i => i.name);
+    if (ingredients.length === 0) {
+      return 0;
+    }
 
     const matches = ingredients.filter(ingredient => {
       const ing = ingredient.toLowerCase().trim();
