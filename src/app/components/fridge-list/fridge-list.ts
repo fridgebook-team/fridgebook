@@ -2,11 +2,7 @@ import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FridgeService, FridgeItem } from '../../services/fridge';
-import { ViewChild } from '@angular/core';
-import { BarcodeScannerComponent } from '../barcode-scanner/barcode-scanner';
-import { ReceiptScanButtonComponent } from '../receipt-scan-button/receipt-scan-button';
-import { BarcodeDraft } from '../../models/barcode.models';
-import Fuse from 'fuse.js';
+
 
 @Component({
   selector: 'app-fridge-list',
