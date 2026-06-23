@@ -16,7 +16,7 @@ export class FridgeService {
   //Alles laden
   async loadItems() {
     this.items = await this.db.getAll("lebensmittel");
-    console.log("fridge service: items after load:", this.items);
+   //console.log("fridge service: items after load:", this.items);
   }
 
   // Hinzufügen

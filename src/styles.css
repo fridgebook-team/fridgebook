@@ -43,12 +43,12 @@
 /* Veggie theme — warmes Salbeigrün */
 .veggie {
   --color-bg-beige:           #f3f1e6;
-  --color-bg-secondary-beige: #e8e4d0;
-  --color-dark-beige:         #cac89a;
-  --color-dark-red:           #5a5730;
-  --color-oliv:               #7c7a48;
-  --color-dark-text:          #33311a;
-  --color-green:              #616040;
+  --color-bg-secondary-beige: #d0e8df;
+  --color-dark-beige:         #9acabb;
+  --color-dark-red:           #305a50;
+  --color-oliv:               #487c73;
+  --color-dark-text:          #1a332e;
+  --color-green:              #406151;
 }
 
 /* ============================================================

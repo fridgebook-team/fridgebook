@@ -64,7 +64,7 @@ export class Favorites implements OnInit {
       id: 1,
       name: 'Spaghetti Aglio e Olio',
       subtitle: 'Einfach, schnell und voller Geschmack',
-      image: 'images/recipes/spaghetti-aglio.jpg',
+      image: 'images/recipes/ravioli.jpg',
       time: '20 Min',
       difficulty: 'Einfach',
       servings: '2',
@@ -95,7 +95,7 @@ export class Favorites implements OnInit {
       id: 2,
       name: 'Chicken Teriyaki Bowl',
       subtitle: 'Asiatische Bowl mit Reis und Gemüse',
-      image: 'images/recipes/teriyaki.jpg',
+      image: 'images/recipes/ravioli.jpg',
       time: '30 Min',
       difficulty: 'Mittel',
       servings: '2',
@@ -126,7 +126,7 @@ export class Favorites implements OnInit {
       id: 3,
       name: 'Vegan Buddha Bowl',
       subtitle: 'Bunte Bowl voller Nährstoffe',
-      image: 'images/recipes/buddha.jpg',
+      image: 'images/recipes/ravioli.jpg',
       time: '25 Min',
       difficulty: 'Einfach',
       servings: '2',
@@ -157,7 +157,7 @@ export class Favorites implements OnInit {
       id: 4,
       name: 'Tomato Basil Pasta',
       subtitle: 'Frische Tomaten mit Basilikum',
-      image: 'images/recipes/tomato-pasta.jpg',
+      image: 'images/recipes/ravioli.jpg',
       time: '15 Min',
       difficulty: 'Einfach',
       servings: '2',
@@ -189,7 +189,7 @@ export class Favorites implements OnInit {
   async ngOnInit() {
     await this.favoritesService.loadFavorites();
     await this.fridgeService.loadItems();
-    this.recipes = this.recipeService.getRecipes();
+    //this.recipes = this.recipeService.getRecipes();
 
     const savedTime = localStorage.getItem('favoritesTimeFilter');
     if (savedTime) {
@@ -202,6 +202,9 @@ export class Favorites implements OnInit {
     this.filteredRecipes = [...this.recipes];
     this.applyFilters();
     this.cdr.detectChanges();
+    /*console.log('RECIPES:', this.recipes);
+    console.log('FAVORITES:', this.favoritesService.favoriteIds);
+    console.log('FILTERED:', this.filteredRecipes);*/
   }
 
   setTimeFilter(time: string) {
